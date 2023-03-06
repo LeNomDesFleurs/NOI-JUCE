@@ -97,10 +97,10 @@ private:
         QAttachement;
     juce::Label QLabel;
 
-    juce::Slider numberOfBandSlider;
+    juce::Slider BandSelectorSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
-        numberOfBandAttachement;
-    juce::Label numberOfBandLabel;
+        BandSelectorAttachement;
+    juce::Label BandSelectorLabel;
 
     juce::ToggleButton bandModeButton;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>bandModeAttachement;

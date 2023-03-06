@@ -51,17 +51,17 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     addAndMakeVisible(QLabel);
     QLabel.setText("Q", juce::dontSendNotification);
     //-------------------------------------------------------
-    addAndMakeVisible(numberOfBandSlider);
-    numberOfBandSlider.setLookAndFeel(&otherLookAndFeel);
-    numberOfBandSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    numberOfBandAttachement.reset(
+    addAndMakeVisible(BandSelectorSlider);
+    BandSelectorSlider.setLookAndFeel(&otherLookAndFeel);
+    BandSelectorSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    BandSelectorAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "band_selector", numberOfBandSlider));
-    numberOfBandSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, numberOfBandSlider.getTextBoxHeight());
+        (vts, "band_selector", BandSelectorSlider));
+    BandSelectorSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, BandSelectorSlider.getTextBoxHeight());
 
 
-    addAndMakeVisible(numberOfBandLabel);
-    numberOfBandLabel.setText("Number Of Band", juce::dontSendNotification);
+    addAndMakeVisible(BandSelectorLabel);
+    BandSelectorLabel.setText("Band Selector", juce::dontSendNotification);
     //--------------------------------------------------------
     addAndMakeVisible(bandModeButton);
     //bandModeButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "band_mode", bandModeButton));
@@ -104,9 +104,9 @@ void SinensisAudioProcessorEditor::resized()
                                     QSlider.getY() - 30,
                                     200, 50 });
 
-    numberOfBandSlider.setBounds({ 275, marge_haute_slider, 100, 100 });
-    numberOfBandLabel.setBounds({ numberOfBandSlider.getX() - 5,
-                                    numberOfBandSlider.getY() - 30,
+    BandSelectorSlider.setBounds({ 275, marge_haute_slider, 100, 100 });
+    BandSelectorLabel.setBounds({ BandSelectorSlider.getX() - 5,
+                                    BandSelectorSlider.getY() - 30,
                                     200, 50 });
 
     bandModeButton.setBounds({ 275, marge_haute_slider + 100, 100, 100 });

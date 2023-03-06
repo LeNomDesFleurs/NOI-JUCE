@@ -198,7 +198,7 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         sinensis_parameters.gain_Q_link = false;
         //band mode
        // sinensis_parameters.band_selector_mode = static_cast <int> (bandModeParameter->load());
-        sinensis_parameters.band_selector = 1;
+        sinensis_parameters.band_selector_mode = 0;
 
         sinensis.setParameters(sinensis_parameters);
         //sinensis[1].setParameters(sinensis_parameters);

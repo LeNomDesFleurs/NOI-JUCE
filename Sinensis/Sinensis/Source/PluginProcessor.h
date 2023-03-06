@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "Filter.h"
+#include "Sinensis.h"
 
 //==============================================================================
 /**
@@ -65,7 +66,8 @@ private:
     std::atomic <float>* ratioParameter = nullptr;
     std::atomic <float>* numberOfBandParameter = nullptr;
 
-    noi::Filter::BPF bpf[2][6];
+    Sinensis::Parameters sinensis_parameters;
+    Sinensis sinensis[2];
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SinensisAudioProcessor)

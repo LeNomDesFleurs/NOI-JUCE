@@ -127,11 +127,7 @@ void SinensisAudioProcessor::changeProgramName (int index, const juce::String& n
 void SinensisAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     for (int channel = 0; channel < 2; channel++){
-        for (int j = 0; j < 6; j++){
-
-            bpf[channel][j].setSamplingFrequency(static_cast <float> (sampleRate));
-
-        }
+            sinensis[channel].setSamplingFrequency(static_cast <float> (sampleRate));
     }
 }
 
@@ -172,62 +168,39 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+
+
+        Sinensis::Parameters sinensis_params;
         //retrieve param
         //Q
-        auto Q = QParameter->load();
+        sinensis_parameters.Q = QParameter->load();
         //Number of band
-        auto numberOfBand = numberOfBandParameter->load();
+        sinensis_parameters.band_selector = numberOfBandParameter->load();
         //Ratio
-        auto ratio = ratioParameter->load();
+        sinensis_parameters.ratio = ratioParameter->load();
         //frequence
-        auto frequence = cutoffFrequencyParameter->load();
+        sinensis_parameters.frequency = cutoffFrequencyParameter->load();
+
+        sinensis_parameters.gain_Q_link = false;
+
+        sinensis_parameters.band_selector_mode = 0;
+
+        sinensis[0].setParameters(sinensis_parameters);
+        sinensis[1].setParameters(sinensis_parameters);
 
  
-
-    //process filter
     for (auto channel = 0; channel < buffer.getNumChannels(); ++channel) {
-        if (ratio < 0) { ratio = 1 / -ratio; }
-        for (int i = 0; i < numberOfBand; i++) {
-            //multiply frequence by ratio
-            float thisBandFreq = frequence;
-            for (int j = 1; j <= i; j++) { thisBandFreq *= ratio; }
-            thisBandFreq = truncf(thisBandFreq);
-            //frequency folding
-            while (thisBandFreq > 15000.f || thisBandFreq < 30.f) {
-                if (thisBandFreq > 15000.F) { thisBandFreq = 15000.f - (thisBandFreq - 15000.f); }
-                if (thisBandFreq < 30.f) { thisBandFreq = 30.f + (30.f - thisBandFreq); }
-            }
-            //setParam only compute if params are different
-            bpf[channel][i].setParam(thisBandFreq, Q);
-        }
+
         // to access the sample in the channel as a C-style array
         auto channelSamples = buffer.getWritePointer(channel);
 
         // for each sample in the channel
         for (auto n = 0; n < buffer.getNumSamples(); ++n) {
             const auto input = channelSamples[n];
-            auto output = 0.0f;
-            for (int i = 0; i < numberOfBand; i++) {
-                float j = static_cast<float> (i);
-                if (numberOfBand - j < 1) {
-                    output += (bpf[channel][i].process(input) / numberOfBand) * (numberOfBand - j);
-                }
-                else {
-                    output += bpf[channel][i].process(input) / (numberOfBand);
-                }
-            }
-
-            channelSamples[n] = output;
+            channelSamples[n] = sinensis[channel].processSample(input);
         }
     }
  

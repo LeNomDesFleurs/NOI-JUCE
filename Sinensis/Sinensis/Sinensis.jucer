@@ -2,9 +2,11 @@
 
 <JUCERPROJECT id="kQaiHY" name="Sinensis" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              cppLanguageStandard="20">
+              cppLanguageStandard="20" splashScreenColour="Dark" pluginManufacturer="NOI">
   <MAINGROUP id="uHaB5W" name="Sinensis">
     <GROUP id="{E2A03FD0-E1AE-EF2B-E602-EA2B64153762}" name="Source">
+      <FILE id="j2TeYw" name="Sinensis.h" compile="0" resource="0" file="Source/Sinensis.h"/>
+      <FILE id="rfBeSj" name="Sinensis.cpp" compile="1" resource="0" file="Source/Sinensis.cpp"/>
       <FILE id="gJ3HU8" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
       <FILE id="ZLKIty" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

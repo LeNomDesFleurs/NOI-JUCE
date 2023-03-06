@@ -17,7 +17,8 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     const float text_box_width = 50.0f;
     //------------------------------------------------------
     addAndMakeVisible(cutoffFrequencySlider);
-    cutoffFrequencySlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    cutoffFrequencySlider.setLookAndFeel(&otherLookAndFeel);
+    cutoffFrequencySlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     cutoffFrequencyAttachment.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
         (vts, "cutoff_frequency", cutoffFrequencySlider));
@@ -28,7 +29,8 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
         juce::dontSendNotification);
     //-------------------------------------------------------
     addAndMakeVisible(ratioSlider);
-    ratioSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    ratioSlider.setLookAndFeel(&otherLookAndFeel);
+    ratioSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     ratioAttachment.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
         (vts, "ratio", ratioSlider));
@@ -39,7 +41,8 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     ratioLabel.setText("Ratio", juce::dontSendNotification);
     //-------------------------------------------------------
     addAndMakeVisible(QSlider);
-    QSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    QSlider.setLookAndFeel(&otherLookAndFeel);
+    QSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     QAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
         (vts, "Q", QSlider));
@@ -49,7 +52,8 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     QLabel.setText("Q", juce::dontSendNotification);
     //-------------------------------------------------------
     addAndMakeVisible(numberOfBandSlider);
-    numberOfBandSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    numberOfBandSlider.setLookAndFeel(&otherLookAndFeel);
+    numberOfBandSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     numberOfBandAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
         (vts, "number_of_band", numberOfBandSlider));
@@ -58,8 +62,11 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
 
     addAndMakeVisible(numberOfBandLabel);
     numberOfBandLabel.setText("Number Of Band", juce::dontSendNotification);
+    //--------------------------------------------------------
+    addAndMakeVisible(bandModeButton);
+    //bandModeButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "band_mode", bandModeButton));
 
-    setSize(400, 400);
+    setSize(400, 300);
 }
 
 SinensisAudioProcessorEditor::~SinensisAudioProcessorEditor()
@@ -70,9 +77,9 @@ SinensisAudioProcessorEditor::~SinensisAudioProcessorEditor()
 void SinensisAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
+   // g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(juce::Colours::darkgrey);
+    g.setColour (juce::Colours::whitesmoke);
     g.setFont (15.0f);
 
     g.drawFittedText("Sinensis", 0, 0, getWidth(), 30, juce::Justification::centred, 1);
@@ -80,27 +87,29 @@ void SinensisAudioProcessorEditor::paint (juce::Graphics& g)
 
 void SinensisAudioProcessorEditor::resized()
 {
-    const int marge_haute_slider = 70;
+    const int marge_haute_slider = 60;
 
-    cutoffFrequencySlider.setBounds({ 25, marge_haute_slider, 100, 300 });
-    cutoffFrequencyLabel.setBounds({ cutoffFrequencySlider.getX() - 20,
+    cutoffFrequencySlider.setBounds({ 10, marge_haute_slider, 100, 100 });
+    cutoffFrequencyLabel.setBounds({ cutoffFrequencySlider.getX() - 10,
                                     cutoffFrequencySlider.getY() - 30,
                                     200, 50 });
 
-    ratioSlider.setBounds({ 100, marge_haute_slider, 100, 300 });
+    ratioSlider.setBounds({ 100, marge_haute_slider, 100, 100 });
     ratioLabel.setBounds({ ratioSlider.getX() + 30,
                                     ratioSlider.getY() - 30,
                                     200, 50 });
 
-    QSlider.setBounds({ 175, marge_haute_slider, 100, 300 });
+    QSlider.setBounds({ 190, marge_haute_slider, 100, 100 });
     QLabel.setBounds({ QSlider.getX() + 35,
                                     QSlider.getY() - 30,
                                     200, 50 });
 
-    numberOfBandSlider.setBounds({ 250, marge_haute_slider, 100, 300 });
-    numberOfBandLabel.setBounds({ numberOfBandSlider.getX(),
+    numberOfBandSlider.setBounds({ 275, marge_haute_slider, 100, 100 });
+    numberOfBandLabel.setBounds({ numberOfBandSlider.getX() - 5,
                                     numberOfBandSlider.getY() - 30,
                                     200, 50 });
+
+    bandModeButton.setBounds({ 275, marge_haute_slider + 100, 100, 100 });
 
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..

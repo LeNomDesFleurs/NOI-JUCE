@@ -65,9 +65,12 @@ private:
     std::atomic <float>* QParameter = nullptr;
     std::atomic <float>* ratioParameter = nullptr;
     std::atomic <float>* numberOfBandParameter = nullptr;
+    std::atomic <float>* bandModeParameter = nullptr;
+
+  
 
     Sinensis::Parameters sinensis_parameters;
-    Sinensis sinensis[2];
+    Sinensis sinensis;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SinensisAudioProcessor)

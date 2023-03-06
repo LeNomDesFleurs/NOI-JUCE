@@ -13,7 +13,9 @@
 Sinensis::Sinensis(Sinensis::Parameters parameters) {
     m_parameters = parameters;
 }
-Sinensis::Sinensis() {};
+Sinensis::Sinensis() {
+
+};
 
 Sinensis::~Sinensis() {
 
@@ -29,14 +31,16 @@ float Sinensis::processSample(float input){
     computeQ();
     prepareBpf();
     float output = 0;
-    for (int i; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
         output += m_bpf[i].process(input) * m_gain[i];
     }
+    if (output > 1.0f) output = 1.0f;
+    if (output < -1.0f) output = -1.0f;
     return output;
 }
 
 void Sinensis::computeFrequency() {
-    if (m_parameters.ratio < 0) { m_parameters.ratio = 1 / -m_parameters.ratio; }
+   // if (m_parameters.ratio < 0) { m_parameters.ratio = 1 / -m_parameters.ratio; }
     for (int i = 0; i < 6; i++) {
         //multiply frequence by ratio
         float thisBandFreq = m_parameters.frequency;
@@ -47,7 +51,6 @@ void Sinensis::computeFrequency() {
             if (thisBandFreq > 15000.F) { thisBandFreq = 15000.f - (thisBandFreq - 15000.f); }
             if (thisBandFreq < 30.f) { thisBandFreq = 30.f + (30.f - thisBandFreq); }
         }
-        //setParam only compute if params are different
         m_frequency[i] = thisBandFreq;
     }
 }
@@ -97,8 +100,8 @@ void Sinensis::computeQ() {
         }
         return;
     }
-    for (auto Q : m_Q) {
-        Q = m_parameters.Q;
+    for (int i = 0; i < 6; i++) {
+        m_Q[i] = m_parameters.Q;
     }
 }
 

@@ -56,7 +56,7 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     numberOfBandSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     numberOfBandAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "number_of_band", numberOfBandSlider));
+        (vts, "band_selector", numberOfBandSlider));
     numberOfBandSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, numberOfBandSlider.getTextBoxHeight());
 
 

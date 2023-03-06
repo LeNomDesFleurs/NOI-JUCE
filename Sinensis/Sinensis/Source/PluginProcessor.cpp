@@ -43,7 +43,7 @@ parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
         juce::NormalisableRange{0.7f, 40.0f, 0.1f}, 1.0f),
 
     std::make_unique<juce::AudioParameterFloat>(
-        "number_of_band",
+        "band_selector",
         "Number Of Band",
         juce::NormalisableRange{0.0f, 1.0f, 0.01f}, 0.0f) ,
 
@@ -61,7 +61,7 @@ parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
         cutoffFrequencyParameter = parameters.getRawParameterValue("cutoff_frequency");
         ratioParameter = parameters.getRawParameterValue("ratio");
         QParameter = parameters.getRawParameterValue("Q");
-        numberOfBandParameter = parameters.getRawParameterValue("number_of_band");
+        BandSelectorParameter = parameters.getRawParameterValue("band_selector");
         bandModeParameter = parameters.getRawParameterValue("band_mode");
     }
 
@@ -189,7 +189,7 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         //Q
         sinensis_parameters.Q = QParameter->load();
         //Number of band
-        sinensis_parameters.band_selector = numberOfBandParameter->load();
+        sinensis_parameters.band_selector = BandSelectorParameter->load();
         //Ratio
         sinensis_parameters.ratio = ratioParameter->load();
         //frequence

@@ -56,21 +56,27 @@ void Sinensis::computeFrequency() {
 }
 
 void Sinensis::computeGain() {
-    switch (m_parameters.band_selector_mode){
-    case 0:computeLowHigh();
-    case 1:computeOddEven();
+    for (int i = 0; i < 6; i++) {
+   
+        m_gain[i] = m_parameters.band_selector;
     }
+  // switch (m_parameters.band_selector_mode){
+  // case 0:computeLowHigh();
+  // case 1:computeOddEven();
+  // }
+    //computeOddEven();
 }
 
 void Sinensis::computeLowHigh() {
     float band_selector = m_parameters.band_selector;
-    float alpha = (-4.0f * (band_selector * band_selector)) + (4.0f * band_selector) - 1.0f;
-    float beta =  (- 2.0f * (band_selector * band_selector)) + (2.0f * band_selector) + 0.5f;
+    float alpha = band_selector * 2.0f - 1.0f;
+    float beta =  (- 2.0f * (band_selector * band_selector)) + (2.0f * band_selector);
     band_selector *= 6.0f;
 
     for (int i = 0; i < 6; i++) {
         float this_band_index = static_cast<float> (i);
-        float this_band_gain = (this_band_index + 3.0f) * alpha + beta;
+        this_band_index /= 5.0f;
+        float this_band_gain = (this_band_index) * alpha + beta;
         if (this_band_gain < 0.0f) {
             this_band_gain = 0.0f;
         }

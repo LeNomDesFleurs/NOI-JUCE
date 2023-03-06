@@ -64,7 +64,7 @@ private:
     std::atomic <float>* cutoffFrequencyParameter = nullptr;
     std::atomic <float>* QParameter = nullptr;
     std::atomic <float>* ratioParameter = nullptr;
-    std::atomic <float>* numberOfBandParameter = nullptr;
+    std::atomic <float>* BandSelectorParameter = nullptr;
     std::atomic <float>* bandModeParameter = nullptr;
 
   

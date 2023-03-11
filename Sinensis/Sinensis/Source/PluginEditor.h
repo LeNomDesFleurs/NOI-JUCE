@@ -37,25 +37,26 @@ public:
 
         //! [outline]
                 // fill
-        g.setColour(juce::Colours::whitesmoke);
-        g.fillEllipse(rx, ry, rw, rw);
+        //g.setColour(juce::Colours::whitesmoke);
+        //g.fillEllipse(rx, ry, rw, rw);
 
         // outline
         g.setColour(juce::Colours::black);
-        g.drawEllipse(rx, ry, rw, rw, 11.0f);
+        g.drawEllipse(rx, ry, rw, rw, 15.0f);
         //! [outline]
 
         //! [path]
         juce::Path p;
         auto pointerLength = radius * 0.33f;
         auto pointerThickness = 7.0f;
-        p.addEllipse(-pointerThickness * 0.5f, -radius, pointerThickness, pointerThickness);
+  
+        p.addEllipse(-pointerThickness * 0.5f + 2.0f, -radius - 20, pointerThickness, pointerThickness);
         p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
         //! [path]
 
         //! [pointer]
                 // pointer
-        g.setColour(juce::Colours::whitesmoke);
+        g.setColour(juce::Colours::black);
         g.fillPath(p);
         //! [pointer]
     }

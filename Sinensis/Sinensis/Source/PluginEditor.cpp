@@ -78,11 +78,18 @@ void SinensisAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
    // g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+
+    
     g.fillAll(juce::Colours::darkgrey);
     g.setColour (juce::Colours::whitesmoke);
     g.setFont (15.0f);
 
     g.drawFittedText("Sinensis", 0, 0, getWidth(), 30, juce::Justification::centred, 1);
+
+    juce::Path ellipse;
+    ellipse.addEllipse(70, 70, 20, 20);
+    g.fillPath(ellipse);
+
 }
 
 void SinensisAudioProcessorEditor::resized()

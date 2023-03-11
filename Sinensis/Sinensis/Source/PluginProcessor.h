@@ -67,7 +67,6 @@ private:
     std::atomic <float>* BandSelectorParameter = nullptr;
     std::atomic <float>* bandModeParameter = nullptr;
 
-  
 
     Sinensis::Parameters sinensis_parameters;
     Sinensis sinensis;

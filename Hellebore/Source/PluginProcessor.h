@@ -7,8 +7,10 @@
 */
 
 #pragma once
-
 #include <JuceHeader.h>
+#include <array>
+#include "Hellebore.h"
+
 
 //==============================================================================
 /**
@@ -58,5 +60,17 @@ public:
 
 private:
     //==============================================================================
+    noi::StereoMoorer::Parameters hellebore_parameters{ false, 1.F, 0.01f, 0.1f, 10.f };
+    noi::StereoMoorer hellebore = noi::StereoMoorer(hellebore_parameters);
+
+    std::array<float, 2> stereo_samples = { 0, 0 };
+
+    juce::AudioProcessorValueTreeState parameters;
+    std::atomic <float>* variationParameter = nullptr;
+    std::atomic <float>* combTimeParameter = nullptr;
+    std::atomic <float>* timeParameter = nullptr;
+    std::atomic <float>* dryWetParameter = nullptr;
+    std::atomic <float>* freezeParameter = nullptr;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HelleboreAudioProcessor)
 };

@@ -47,16 +47,18 @@ namespace noi {
 		m_buffer.resize(buffer_int);
 		m_read = 0.f;
 		m_write = m_buffer_size / 2.f;
+		m_actual_size = m_write;
+		m_time = max_time / 2.f;
 		m_step = 1.f;
-		std::fill(m_buffer.begin(), m_buffer.end(), 0);
+		std::fill(m_buffer.begin(), m_buffer.end(), 0.);
 	}
 
 	inline float RingBuffer::read() {
 		m_read += m_step;
-		m_read = fmod(m_read, m_buffer_size);
+		m_read = fmodf(m_read, m_buffer_size - 1.f);
 		double tmp;
 		float fractional;
-
+		
 		fractional = modf(m_read, &tmp);
 		int int_read = static_cast<int> (tmp);
 		float sample1 = m_buffer[int_read];
@@ -64,11 +66,12 @@ namespace noi {
 		//linear interpolation
 		float output = ((sample2 - sample1) * fractional) + sample1;
 		return output;
+		return 0.;
 	}
 
 	inline void RingBuffer::write(float new_sample) {
 		m_write += 1.f;
-		m_write = fmod(m_write, m_buffer_size);
+		m_write = fmodf(m_write, m_buffer_size - 1.f);
 		int int_write = static_cast<int>(m_write);
 		m_buffer[int_write] = new_sample;
 	}

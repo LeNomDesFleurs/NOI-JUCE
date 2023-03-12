@@ -46,7 +46,7 @@ HelleboreAudioProcessorEditor::HelleboreAudioProcessorEditor(
     combSizeSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     combSizeAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "comb_size", combSizeSlider));
+        (vts, "comb_time", combSizeSlider));
     combSizeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, combSizeSlider.getTextBoxHeight());
 
     addAndMakeVisible(combSizeLabel);

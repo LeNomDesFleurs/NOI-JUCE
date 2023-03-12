@@ -16,6 +16,9 @@ namespace noi {
 
 	StereoMoorer::StereoMoorer(noi::StereoMoorer::Parameters parameters) {
 		updateParameters(parameters);
+		std::fill(begin(m_combs_status[0]), end(m_combs_status[0]), 0.0);
+		std::fill(begin(m_combs_status[1]), end(m_combs_status[1]), 0.0);
+		std::fill(begin(m_pan_coefs), end(m_pan_coefs), 0.0);
 	};
 
 	void StereoMoorer::updateParameters(noi::StereoMoorer::Parameters parameters) {
@@ -99,8 +102,7 @@ namespace noi {
 				comb_sum += j;
 			}
 			comb_sum /= 6.f;
-			float to_allpass = noi::Outils::dryWet(inputs[i], comb_sum, m_parameters.dry_wet);
-			outputs[i] = m_allpasses[i].process(to_allpass);
+			outputs[i] = noi::Outils::dryWet(inputs[i], m_allpasses[i].process(comb_sum), m_parameters.dry_wet);
 		}
 		return outputs;
 	}

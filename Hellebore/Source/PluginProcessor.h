@@ -60,7 +60,7 @@ public:
 
 private:
     //==============================================================================
-    noi::StereoMoorer::Parameters hellebore_parameters{ false, 1.F, 0.01f, 0.1f, 10.f };
+    noi::StereoMoorer::Parameters hellebore_parameters{ false, 0.5F, 0.01f, 0.1f, 10.f };
     noi::StereoMoorer hellebore = noi::StereoMoorer(hellebore_parameters);
 
     std::array<float, 2> stereo_samples = { 0, 0 };

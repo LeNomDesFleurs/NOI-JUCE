@@ -32,7 +32,7 @@ parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
     std::make_unique<juce::AudioParameterFloat>(
         "time",
         "Time",
-        juce::NormalisableRange{0.1f, 20.0f, 0.01f, 4.f, false}, 10.0f),
+        juce::NormalisableRange{0.1f, 1.0f, 0.01f, 4.f, false}, 10.0f),
 
     std::make_unique<juce::AudioParameterFloat>(
         "comb_time",
@@ -188,7 +188,6 @@ void HelleboreAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
 
     hellebore.updateParameters(hellebore_parameters);
-    //sinensis[1].setParameters(sinensis_parameters);
 
 
 for (auto channel = 0; channel < buffer.getNumChannels(); ++channel) {

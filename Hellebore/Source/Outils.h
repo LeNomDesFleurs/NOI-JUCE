@@ -52,13 +52,13 @@ namespace noi {
 			if (coef < 0) { return 0; }
 			else return coef;
 		}
-		/// @brief take two signals and return the crossfade
-		/// @param dry dry signal
-		/// @param wet wet signal
+		/// @brief take two signals and return the linear crossfade
+		/// @param dry signal
+		/// @param wet signal
 		/// @param parameter 0 full dry / 1 full wet
 		/// @return 
 		inline float dryWet(float dry, float wet, float parameter){
-			return (dry * (1-parameter)) + (wet * parameter);
+			return (dry * (1.0 - parameter)) + (wet * parameter);
 		}
 	
 

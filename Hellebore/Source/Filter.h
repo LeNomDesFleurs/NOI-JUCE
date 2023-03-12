@@ -35,6 +35,10 @@ namespace Filter {
 		float m_gain;
 		float m_looptime;
 	public:
+		inline Allpass(float time) {
+			m_buffer = noi::RingBuffer(time);
+			m_looptime = time;
+		}
 		inline void setReadSpeed(float ratio){
 			m_buffer.setStep(ratio);
 		} 
@@ -56,9 +60,6 @@ namespace Filter {
 			m_buffer.computeStepSize(time);
 			m_looptime = time;
 		}
-		inline 	Allpass(float time) {
-			m_buffer = noi::RingBuffer(time);
-		}
 	};
 
 	class Comb {
@@ -67,6 +68,10 @@ namespace Filter {
 		float m_looptime;
 		noi::RingBuffer m_buffer{2.f};
 	public:
+		inline Comb(float time) {
+			m_buffer = noi::RingBuffer(time);
+			m_looptime = time;
+		}
 		inline void setReadSpeed(float ratio){
 			m_buffer.setStep(ratio);
 		} 
@@ -95,9 +100,7 @@ namespace Filter {
 		inline void setFreeze(bool statut){
 			m_buffer.setFreeze(statut);
 		}
-		inline Comb(float time) {
-			m_buffer = noi::RingBuffer(time);
-		}
+
 	};/*Comb*/
 
 

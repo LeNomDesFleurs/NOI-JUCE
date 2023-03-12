@@ -41,6 +41,7 @@ namespace noi {
 			std::array<float, 2> processStereo(std::array<float, 2> inputs);
 
 		private:
+			//6 comb par canal
 			std::array<std::array<noi::Filter::Comb, 6>, 2> m_combs = { {{
 						noi::Filter::Comb(2.f),
 						noi::Filter::Comb(2.f),
@@ -55,6 +56,7 @@ namespace noi {
 						noi::Filter::Comb(2.f),
 						noi::Filter::Comb(2.f)}}
 			};
+			//1 allpass par canal
 			std::array<noi::Filter::Allpass, 2> m_allpasses{
 					noi::Filter::Allpass(0.006),
 					noi::Filter::Allpass(0.006) };
@@ -63,5 +65,17 @@ namespace noi {
 			std::array<std::array<float, 6>, 2> m_combs_status;
 			std::array<float, 6> m_pan_coefs;
 		};/*StereoMoorer*/
+
+
+		/* Structure Moorer
+		* 
+		* |comb| ->
+		* |comb| ->
+		* |comb| ->	Sum -> Allpass -> Out
+		* |comb| ->
+		* |comb| ->
+		* |comb| ->
+		* 
+		*/
 
 }/*noi*/

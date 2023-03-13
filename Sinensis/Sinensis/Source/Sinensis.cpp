@@ -12,10 +12,11 @@
 
 Sinensis::Sinensis(Sinensis::Parameters parameters) {
     m_parameters = parameters;
+    computeFrequency();
+    computeGain();
+    computeQ();
+    prepareBpf();
 }
-Sinensis::Sinensis() {
-
-};
 
 Sinensis::~Sinensis() {
 
@@ -56,21 +57,21 @@ void Sinensis::computeFrequency() {
 }
 
 void Sinensis::computeGain() {
-   // for (int i = 0; i < 6; i++) {
-   //
-   //     m_gain[i] = m_parameters.band_selector;
-   // }
-  //switch (m_parameters.band_selector_mode){
-  // case 0:computeLowHigh();
-  // case 1:computeOddEven();
-  //}
-    computeLowHigh();
+
+  int selector = static_cast<int> (m_parameters.band_selector_mode);
+   
+  switch (selector){
+  case 0:computeLowHigh(); break;
+  case 1:computeOddEven(); break;
+  case 2:computePeak(); break;
+  }
+
 }
 
 void Sinensis::computeLowHigh() {
     float band_selector = m_parameters.band_selector;
-    float alpha = band_selector * 2.0f - 1.0f;
-    float beta = 1.0f - band_selector;
+    float alpha = band_selector * 4.0f - 2.0f;
+    float beta = -2.0f*(band_selector * band_selector) + 1.0;
 
     for (int i = 0; i < 6; i++) {
         float this_band_index = static_cast<float> (i);
@@ -98,6 +99,25 @@ void Sinensis::computeOddEven() {
     }
 }
 
+void Sinensis::computePeak() {
+        float cursor = m_parameters.band_selector;
+        cursor *= 5.;
+        for (int i = 0; i < 6; i++) {
+            float band_index = static_cast<float> (i);
+            float band_gain = 0.0f;
+            if (cursor < band_index) {
+                band_gain = band_index - cursor;
+            }
+            else { band_gain = cursor - band_index; }
+            
+            band_gain = 1 - band_gain;
+            if (band_gain > 1.) { band_gain = 1.; }
+            if (band_gain < 0.) { band_gain = 0.; }
+            //calculer proximiter avec curseur
+            m_gain[i] = band_gain;
+        }
+}
+
 void Sinensis::computeQ() {
     if (m_parameters.gain_Q_link) {
         for (int i = 0; i < 6; i++) {
@@ -106,7 +126,9 @@ void Sinensis::computeQ() {
         return;
     }
     for (int i = 0; i < 6; i++) {
-        m_Q[i] = m_parameters.Q;
+        float Q = (m_parameters.Q * m_gain[i]) + 0.707;
+        if (Q > 32.) Q = 32.0f;
+        m_Q[i] = Q;
     }
 }
 

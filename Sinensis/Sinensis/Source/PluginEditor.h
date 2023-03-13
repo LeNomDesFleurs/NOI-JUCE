@@ -50,13 +50,13 @@ public:
         auto pointerLength = radius * 0.33f;
         auto pointerThickness = 7.0f;
   
-        p.addEllipse(-pointerThickness * 0.5f + 2.0f, -radius - 20, pointerThickness, pointerThickness);
+        p.addEllipse(-pointerThickness * 0.5f + 2.0f, -radius, pointerThickness, pointerThickness);
         p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
         //! [path]
 
         //! [pointer]
                 // pointer
-        g.setColour(juce::Colours::black);
+        g.setColour(juce::Colours::white);
         g.fillPath(p);
         //! [pointer]
     }
@@ -103,11 +103,16 @@ private:
         BandSelectorAttachement;
     juce::Label BandSelectorLabel;
 
-    juce::ToggleButton bandModeButton;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>bandModeAttachement;
-    juce::Label bandModeLabel;
+    //juce::ToggleButton bandModeButton;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>bandModeAttachement;
+    //juce::Label bandModeLabel;
 
+    juce::Slider BandSelectorModeSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
+        BandSelectorModeAttachement;
+    juce::Label BandSelectorModeLabel;
 
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SinensisAudioProcessorEditor)
 };

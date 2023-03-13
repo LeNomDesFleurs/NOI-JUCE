@@ -13,23 +13,30 @@
 
 class Sinensis {
 public:
+    ///<summary> Parameters of Sinensis </summary>
+        /// <param name = "frequency"> </param>
+        /// @param float Q
+        /// @param float band_selector
+        /// @param float ratio
+        /// @param bool gain_Q_link
+        /// @param float band_selector_mode
     struct Parameters{
         float frequency;
         float Q;
         float band_selector;
         float ratio;
         bool gain_Q_link;
-        int band_selector_mode;
+        float band_selector_mode;
 
     };
     Sinensis(Sinensis::Parameters parameters);
-    Sinensis();
     ~Sinensis();
     void setParameters(Sinensis::Parameters parameters);
     float processSample(float input);
     void computeGain();
         void computeLowHigh();
         void computeOddEven();
+        void computePeak();
     void computeQ();
     void prepareBpf();
     void computeFrequency();

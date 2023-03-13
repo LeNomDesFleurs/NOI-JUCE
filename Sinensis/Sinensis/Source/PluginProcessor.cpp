@@ -40,21 +40,26 @@ parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
     std::make_unique<juce::AudioParameterFloat>(
         "Q",
         "Q",
-        juce::NormalisableRange{0.7f, 40.0f, 0.1f}, 1.0f),
+        juce::NormalisableRange{0.7f, 35.0f, 0.1f}, 1.0f),
 
     std::make_unique<juce::AudioParameterFloat>(
         "band_selector",
         "Number Of Band",
         juce::NormalisableRange{0.0f, 1.0f, 0.01f}, 0.0f) ,
 
-    std::make_unique<juce::AudioParameterBool>(
-        "band_mode",
-        "Band Mode",
-        false,
-        "mode",
-        nullptr,
-        nullptr
-        )
+      std::make_unique<juce::AudioParameterFloat>(
+        "band_selector_mode",
+        "Band Selector Mode",
+        juce::NormalisableRange{0.0f, 2.0f, 1.f}, 0.0f)
+
+    //std::make_unique<juce::AudioParameterBool>(
+    //    "band_mode",
+    //    "Band Mode",
+    //    false,
+    //    "mode",
+    //    nullptr,
+    //    nullptr
+    //    )
     })
 
     {
@@ -62,7 +67,7 @@ parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
         ratioParameter = parameters.getRawParameterValue("ratio");
         QParameter = parameters.getRawParameterValue("Q");
         BandSelectorParameter = parameters.getRawParameterValue("band_selector");
-        bandModeParameter = parameters.getRawParameterValue("band_mode");
+        bandSelectorModeParameter = parameters.getRawParameterValue("band_selector_mode");
     }
 
 
@@ -138,10 +143,10 @@ void SinensisAudioProcessor::changeProgramName (int index, const juce::String& n
 //==============================================================================
 void SinensisAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    //for (int channel = 0; channel < 2; channel++){
-    //        sinensis[channel].setSamplingFrequency(static_cast <float> (sampleRate));
-    //}
-    sinensis.setSamplingFrequency(static_cast <float> (sampleRate));
+    for (int channel = 0; channel < 2; channel++){
+            sinensis[channel].setSamplingFrequency(static_cast <float> (sampleRate));
+    }
+    //sinensis.setSamplingFrequency(static_cast <float> (sampleRate));
 
 }
 
@@ -198,23 +203,23 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         sinensis_parameters.gain_Q_link = false;
         //band mode
        // sinensis_parameters.band_selector_mode = static_cast <int> (bandModeParameter->load());
-        sinensis_parameters.band_selector_mode = 0;
+        sinensis_parameters.band_selector_mode = bandSelectorModeParameter->load();
 
-        sinensis.setParameters(sinensis_parameters);
-        //sinensis[1].setParameters(sinensis_parameters);
+        sinensis[0].setParameters(sinensis_parameters);
+        sinensis[1].setParameters(sinensis_parameters);
 
  
-   // for (auto channel = 0; channel < buffer.getNumChannels(); ++channel) {
+   for (auto channel = 0; channel < 2; ++channel) {
 
         // to access the sample in the channel as a C-style array
-        auto channelSamples = buffer.getWritePointer(0);
+        auto channelSamples = buffer.getWritePointer(channel);
 
         // for each sample in the channel
         for (auto n = 0; n < buffer.getNumSamples(); ++n) {
             const auto input = channelSamples[n];
-            channelSamples[n] = sinensis.processSample(input);
+            channelSamples[n] = sinensis[channel].processSample(input);
         }
-    //}
+    }
  
 }
 

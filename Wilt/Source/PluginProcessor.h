@@ -9,21 +9,19 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "Filter.h"
-#include "Sinensis.h"
 
 //==============================================================================
 /**
 */
-class SinensisAudioProcessor  : public juce::AudioProcessor
+class WiltAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
 {
 public:
     //==============================================================================
-    SinensisAudioProcessor();
-    ~SinensisAudioProcessor() override;
+    WiltAudioProcessor();
+    ~WiltAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -60,22 +58,5 @@ public:
 
 private:
     //==============================================================================
-    juce::AudioProcessorValueTreeState parameters;
-    std::atomic <float>* cutoffFrequencyParameter = nullptr;
-    std::atomic <float>* QParameter = nullptr;
-    std::atomic <float>* ratioParameter = nullptr;
-    std::atomic <float>* BandSelectorParameter = nullptr;
-    std::atomic <float>* bandModeParameter = nullptr;
-    std::atomic <float>* bandSelectorModeParameter = nullptr;
-    std::atomic <float>* midiParameter = nullptr;
-    int m_note = 0;
-
-    Sinensis::Parameters sinensis_parameters {218.,0.707, 3., 1.5, false, 0.0};
-    Sinensis sinensis[2] = { Sinensis(sinensis_parameters), Sinensis(sinensis_parameters) };
-
-
-   
-
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SinensisAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WiltAudioProcessor)
 };

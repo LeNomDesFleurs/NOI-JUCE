@@ -103,9 +103,9 @@ private:
         BandSelectorAttachement;
     juce::Label BandSelectorLabel;
 
-    //juce::ToggleButton bandModeButton;
-    //std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>bandModeAttachement;
-    //juce::Label bandModeLabel;
+    juce::ToggleButton midiButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>midiAttachement;
+    juce::Label midiLabel;
 
     juce::Slider BandSelectorModeSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>

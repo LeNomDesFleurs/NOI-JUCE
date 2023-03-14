@@ -80,8 +80,8 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     BandSelectorModeLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     BandSelectorModeLabel.setText("Band Selector Mode", juce::dontSendNotification);
 
-    //addAndMakeVisible(bandModeButton);
-    //bandModeButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "band_mode", bandModeButton));
+    addAndMakeVisible(midiButton);
+    //midiButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "midi", midiButton));
 
 
     setSize(600, 300);
@@ -97,7 +97,7 @@ void SinensisAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
    // g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
-    g.fillAll(juce::Colours::whitesmoke);
+    g.fillAll(juce::Colours::grey);
     g.setColour (juce::Colours::black);
     g.setFont (15.0f);
 
@@ -134,7 +134,7 @@ void SinensisAudioProcessorEditor::resized()
                                     BandSelectorSlider.getY() - 30,
                                     200, 50 });
 
-    //bandModeButton.setBounds({ 275, marge_haute_slider + 100, 100, 100 });
+    midiButton.setBounds({ 275, marge_haute_slider + 100, 100, 100 });
 
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..

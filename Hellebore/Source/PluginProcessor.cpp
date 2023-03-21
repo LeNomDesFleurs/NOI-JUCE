@@ -32,12 +32,12 @@ parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
     std::make_unique<juce::AudioParameterFloat>(
         "time",
         "Time",
-        juce::NormalisableRange{0.1f, 1.0f, 0.01f, 4.f, false}, 10.0f),
+        juce::NormalisableRange{0.1f, 4.0f, 0.01f, 0.3f, false}, 2.0f),
 
     std::make_unique<juce::AudioParameterFloat>(
         "comb_time",
         "Comb Time",
-        juce::NormalisableRange{0.010f, 1.0f, 0.001f, 4.f, false}, 0.01f),
+        juce::NormalisableRange{0.010f, 1.0f, 0.001f, 0.3f, false}, 0.10f),
 
     std::make_unique<juce::AudioParameterFloat>(
         "freeze",

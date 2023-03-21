@@ -57,20 +57,16 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    void setParam();
 
 private:
     //==============================================================================
-    juce::AudioProcessorValueTreeState parameters;
-    std::atomic <float>* cutoffFrequencyParameter = nullptr;
-    std::atomic <float>* QParameter = nullptr;
-    std::atomic <float>* ratioParameter = nullptr;
-    std::atomic <float>* BandSelectorParameter = nullptr;
-    std::atomic <float>* bandModeParameter = nullptr;
-    std::atomic <float>* bandSelectorModeParameter = nullptr;
-    std::atomic <float>* midiParameter = nullptr;
-    int m_note = 0;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParams();
 
-    Sinensis::Parameters sinensis_parameters {218.,0.707, 3., 1.5, false, 0.0};
+    juce::AudioProcessorValueTreeState parameters;
+
+    int m_note = 0;
+    Sinensis::Parameters sinensis_parameters {0,0, 218., 0.707, 0., 1.5, 0.4, 0.4};
     Sinensis sinensis[2] = { Sinensis(sinensis_parameters), Sinensis(sinensis_parameters) };
 
 

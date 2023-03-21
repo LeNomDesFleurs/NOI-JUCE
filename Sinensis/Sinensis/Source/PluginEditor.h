@@ -83,24 +83,26 @@ private:
     // access the processor object that created it.
     SinensisAudioProcessor& audioProcessor;
 
+    juce::ComboBox bandModeSelector;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>bandModeAttachment;
+
+    juce::ComboBox midiModeSelector;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>midiModeAttachment;
+
     juce::Slider cutoffFrequencySlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
-        cutoffFrequencyAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>cutoffFrequencyAttachment;
     juce::Label cutoffFrequencyLabel;
 
     juce::Slider ratioSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
-        ratioAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>ratioAttachment;
     juce::Label ratioLabel;
 
     juce::Slider QSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
-        QAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>QAttachement;
     juce::Label QLabel;
 
     juce::Slider BandSelectorSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
-        BandSelectorAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>BandSelectorAttachement;
     juce::Label BandSelectorLabel;
 
     juce::ToggleButton midiButton;
@@ -108,9 +110,9 @@ private:
     juce::Label midiLabel;
 
     juce::Slider BandSelectorModeSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
-        BandSelectorModeAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>BandSelectorModeAttachement;
     juce::Label BandSelectorModeLabel;
+
 
     
 

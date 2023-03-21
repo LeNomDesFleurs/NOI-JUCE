@@ -89,11 +89,16 @@ namespace noi {
 				float feedback = m_a[0];
 				//1500 choosed by experimentation w/ sinensis, self osc around Q = 38
 				feedback *= (m_Q / 1500.F);
-				if (feedback < -4.5 || feedback > 4.5) {
-					feedback /= 10.f;
+				if (feedback < -0.95) {
+					float overtaking = feedback + 0.95;
+					feedback = -0.95 - (overtaking / 5.);
 				}
-				if (feedback > 5.0f) { feedback = 5.0f; }
-				if (feedback < -5.0f) { feedback = -5.0f; }
+				if (feedback > 0.95) {
+					float overtaking = feedback - 0.95;
+					feedback = 0.95 + (overtaking / 5.);
+				}
+				if (feedback > 1.0f) { feedback = 1.0f; }
+				if (feedback < -1.0f) { feedback =-1.0f; }
 				b0 += feedback;
 				//shift new value in
 				m_b[2] = m_b[1];

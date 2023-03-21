@@ -43,15 +43,15 @@ namespace Filter {
 			m_buffer.setStep(ratio);
 		} 
 		inline void setGain(float rt60) {
-			m_gain = -60 * m_looptime / rt60;
-			m_gain = pow(10, (m_gain / 20));
+			m_gain = -60. * m_looptime / rt60;
+			m_gain = powf(10.0, (m_gain / 20.0));
 		}
 		inline void overrideFeedback(float feedback){
 			m_gain = feedback;
 		}
 		inline float process(float input) {
 			float delay = m_buffer.read();
-			delay = noi::Outils::clipValue(delay, -5.f, 5.f);
+			delay = noi::Outils::clipValue(delay, -1.f, 1.f);
 			float y = ((input + delay * m_gain) * (-m_gain)) + delay;
 			m_buffer.write(y);
 			return y;
@@ -77,14 +77,14 @@ namespace Filter {
 		} 
 		inline void setGain(float rt60) {
 			m_gain = -60.f * m_looptime / rt60;
-			m_gain = pow(10.f, (m_gain / 20.f));
+			m_gain = powf(10.f, (m_gain / 20.f));
 		}
 		inline void overrideFeedback(float feedback){
 			m_gain = feedback;
 		}
 		inline float process(float input) {
 			float delay = m_buffer.read();
-			delay = noi::Outils::clipValue(delay, -5.f, 5.f);
+			delay = noi::Outils::clipValue(delay, -1.f, 1.f);
 			float y = delay * m_gain + input;
 			m_buffer.write(y);
 			return y;

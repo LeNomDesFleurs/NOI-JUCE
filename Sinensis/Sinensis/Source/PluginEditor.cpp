@@ -15,18 +15,26 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     SinensisAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor(&p), audioProcessor(p) {
     const float text_box_width = 50.0f;
+    //-----------------------------------------------------
+    juce::StringArray band_mode_choice{ "Low/High", "Odd/Even", "Peak" };
+    bandModeSelector.addItemList(band_mode_choice, 1);
+    bandModeSelector.setSelectedItemIndex(0);
+    addAndMakeVisible(bandModeSelector);
+
+    bandModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "BANDMODE", bandModeSelector);
+
     //------------------------------------------------------
     addAndMakeVisible(cutoffFrequencySlider);
     cutoffFrequencySlider.setLookAndFeel(&otherLookAndFeel);
     cutoffFrequencySlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     cutoffFrequencyAttachment.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "cutoff_frequency", cutoffFrequencySlider));
+        (vts, "root_frequency", cutoffFrequencySlider));
     cutoffFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, cutoffFrequencySlider.getTextBoxHeight());
 
     addAndMakeVisible(cutoffFrequencyLabel);
     cutoffFrequencyLabel.setColour(juce::Label::textColourId, juce::Colours::black);
-    cutoffFrequencyLabel.setText("Cutoff Frequency",
+    cutoffFrequencyLabel.setText("Root Frequency",
         juce::dontSendNotification);
     //-------------------------------------------------------
     addAndMakeVisible(ratioSlider);
@@ -34,7 +42,7 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     ratioSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     ratioAttachment.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "ratio", ratioSlider));
+        (vts, "RATIO", ratioSlider));
     ratioSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, ratioSlider.getTextBoxHeight());
 
     addAndMakeVisible(ratioLabel);
@@ -44,13 +52,10 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     addAndMakeVisible(QSlider);
     QSlider.setLookAndFeel(&otherLookAndFeel);
     QSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    QAttachement.reset(
-        new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "Q", QSlider));
+    QAttachement.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(vts, "RESONANCE", QSlider));
     QSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, QSlider.getTextBoxHeight());
-
     addAndMakeVisible(QLabel);
-    QLabel.setText("Q", juce::dontSendNotification);
+    QLabel.setText("Resonance", juce::dontSendNotification);
     QLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     //-------------------------------------------------------
     addAndMakeVisible(BandSelectorSlider);
@@ -67,24 +72,17 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     BandSelectorLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     BandSelectorLabel.setText("Band Selector", juce::dontSendNotification);
     //--------------------------------------------------------
-    addAndMakeVisible(BandSelectorModeSlider);
-    BandSelectorModeSlider.setLookAndFeel(&otherLookAndFeel);
-    BandSelectorModeSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    BandSelectorModeAttachement.reset(
-        new juce::AudioProcessorValueTreeState::SliderAttachment
-        (vts, "band_selector_mode", BandSelectorModeSlider));
-    BandSelectorModeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, text_box_width, BandSelectorModeSlider.getTextBoxHeight());
+    juce::StringArray midi_mode_choice{ "Off", "Mono", "Poly" };
+    midiModeSelector.addItemList(midi_mode_choice, 1);
+    midiModeSelector.setSelectedItemIndex(0);
+    addAndMakeVisible(midiModeSelector);
 
+    midiModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "MIDIMODE", midiModeSelector);
 
-    addAndMakeVisible(BandSelectorModeLabel);
-    BandSelectorModeLabel.setColour(juce::Label::textColourId, juce::Colours::black);
-    BandSelectorModeLabel.setText("Band Selector Mode", juce::dontSendNotification);
-
-    addAndMakeVisible(midiButton);
     //midiButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "midi", midiButton));
 
 
-    setSize(600, 300);
+    setSize(480, 190);
 }
 
 SinensisAudioProcessorEditor::~SinensisAudioProcessorEditor()
@@ -109,33 +107,22 @@ void SinensisAudioProcessorEditor::resized()
 {
     const int marge_haute_slider = 60;
 
+    bandModeSelector.setBounds(275, 10, 100, 25);
+
+    midiModeSelector.setBounds(10, 10, 100, 25);
+
     cutoffFrequencySlider.setBounds({ 10, marge_haute_slider, 100, 100 });
-    cutoffFrequencyLabel.setBounds({ cutoffFrequencySlider.getX() - 10,
-                                    cutoffFrequencySlider.getY() - 30,
-                                    200, 50 });
+    cutoffFrequencyLabel.setBounds({ cutoffFrequencySlider.getX() - 8, cutoffFrequencySlider.getY() - 30, 200, 50 });
 
     ratioSlider.setBounds({ 100, marge_haute_slider, 100, 100 });
-    ratioLabel.setBounds({ ratioSlider.getX() + 30,
-                                    ratioSlider.getY() - 30,
-                                    200, 50 });
+    ratioLabel.setBounds({ ratioSlider.getX() + 30, ratioSlider.getY() - 30,200, 50 });
 
     QSlider.setBounds({ 190, marge_haute_slider, 100, 100 });
-    QLabel.setBounds({ QSlider.getX() + 35,
-                                    QSlider.getY() - 30,
-                                    200, 50 });
+    QLabel.setBounds({ QSlider.getX() + 10, QSlider.getY() - 30, 200, 50 });
 
     BandSelectorSlider.setBounds({ 275, marge_haute_slider, 100, 100 });
-    BandSelectorLabel.setBounds({ BandSelectorSlider.getX() - 5,
-                                    BandSelectorSlider.getY() - 30,
-                                    200, 50 });
+    BandSelectorLabel.setBounds({ BandSelectorSlider.getX() - 5, BandSelectorSlider.getY() - 30,200, 50 });
 
-    BandSelectorModeSlider.setBounds({ 360, marge_haute_slider, 100, 100 });
-    BandSelectorModeLabel.setBounds({ BandSelectorSlider.getX() - 5,
-                                    BandSelectorSlider.getY() - 30,
-                                    200, 50 });
+ 
 
-    midiButton.setBounds({ 275, marge_haute_slider + 100, 100, 100 });
-
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
 }

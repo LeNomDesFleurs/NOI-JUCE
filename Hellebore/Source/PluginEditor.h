@@ -50,13 +50,13 @@ public:
         auto pointerLength = radius * 0.33f;
         auto pointerThickness = 7.0f;
 
-        p.addEllipse(-pointerThickness * 0.5f + 2.0f, -radius - 20, pointerThickness, pointerThickness);
+        p.addEllipse(-pointerThickness * 0.5f + 2.0f, -radius, pointerThickness, pointerThickness);
         p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
         //! [path]
 
         //! [pointer]
                 // pointer
-        g.setColour(juce::Colours::black);
+        g.setColour(juce::Colours::white);
         g.fillPath(p);
         //! [pointer]
     }

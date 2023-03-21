@@ -76,7 +76,7 @@ HelleboreAudioProcessorEditor::HelleboreAudioProcessorEditor(
     addAndMakeVisible(freezeLabel);
     freezeLabel.setText("freeze", juce::dontSendNotification);
 
-    setSize(600, 300);
+    setSize(480, 190);
 }
 
 HelleboreAudioProcessorEditor::~HelleboreAudioProcessorEditor()
@@ -93,9 +93,6 @@ void HelleboreAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.drawFittedText("Hellebore", 0, 0, getWidth(), 30, juce::Justification::centred, 1);
 
-    juce::Path ellipse;
-    ellipse.addEllipse(70, 70, 20, 20);
-    g.fillPath(ellipse);
 
 }
 
@@ -104,7 +101,7 @@ void HelleboreAudioProcessorEditor::resized()
     const int marge_haute_slider = 60;
 
     variationSlider.setBounds({ 10, marge_haute_slider, 100, 100 });
-    variationLabel.setBounds({ variationSlider.getX() - 10,
+    variationLabel.setBounds({ variationSlider.getX() ,
                                     variationSlider.getY() - 30,
                                     200, 50 });
 
@@ -114,17 +111,17 @@ void HelleboreAudioProcessorEditor::resized()
                                     200, 50 });
 
     combSizeSlider.setBounds({ 190, marge_haute_slider, 100, 100 });
-    combSizeLabel.setBounds({ combSizeSlider.getX() + 35,
+    combSizeLabel.setBounds({ combSizeSlider.getX() + 10,
                                     combSizeSlider.getY() - 30,
                                     200, 50 });
 
     dryWetSlider.setBounds({ 275, marge_haute_slider, 100, 100 });
-    dryWetLabel.setBounds({ dryWetSlider.getX() - 5,
+    dryWetLabel.setBounds({ dryWetSlider.getX() + 10,
                                     dryWetSlider.getY() - 30,
                                     200, 50 });
 
     freezeSlider.setBounds({ 360, marge_haute_slider, 100, 100 });
-    freezeLabel.setBounds({ freezeSlider.getX() - 5,
+    freezeLabel.setBounds({ freezeSlider.getX() + 10,
                                     freezeSlider.getY() - 30,
                                     200, 50 });
 

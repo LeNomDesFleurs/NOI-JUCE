@@ -26,7 +26,8 @@ void Sinensis::setParameters(Sinensis::Parameters parameters) {
     m_parameters = parameters;
 }
 
-float Sinensis::processSample(float input){
+float Sinensis::processSample(float input, juce::MidiBuffer& midi_buffer) {
+
     computeFrequency();
     computeGain();
     computeQ();
@@ -41,7 +42,16 @@ float Sinensis::processSample(float input){
 }
 
 void Sinensis::computeFrequency() {
-   // if (m_parameters.ratio < 0) { m_parameters.ratio = 1 / -m_parameters.ratio; }
+
+    switch (m_parameters.midi_mode){
+    case 1: computeFrequencyMidiOff(); break;
+    case 2: computeFrequencyMidiMono(); break;
+    case 3: computeFrequencyMidiPoly(); break;
+    }
+}
+
+void Sinensis::computeFrequencyMidiOff() {
+
     for (int i = 0; i < 6; i++) {
         //multiply frequence by ratio
         float thisBandFreq = m_parameters.frequency;
@@ -54,6 +64,14 @@ void Sinensis::computeFrequency() {
         }
         m_frequency[i] = thisBandFreq;
     }
+
+}
+void Sinensis::computeFrequencyMidiMono() {
+
+
+}
+void Sinensis::computeFrequencyMidiPoly() {
+
 }
 
 void Sinensis::computeGain() {
@@ -117,16 +135,16 @@ void Sinensis::computePeak() {
             m_gain[i] = band_gain;
         }
 }
+void Sinensis::computeAttackStep() {
+    m_attack_step = 1 / sampling_frequency * m_parameters.attack;
+}
+void Sinensis::computeDecayStep() {
+    m_decay_step = 1 / sampling_frequency * m_parameters.decay;
+}
 
 void Sinensis::computeQ() {
-    if (m_parameters.gain_Q_link) {
-        for (int i = 0; i < 6; i++) {
-            m_Q[i] = m_gain[i] * m_parameters.Q;
-        }
-        return;
-    }
     for (int i = 0; i < 6; i++) {
-        float Q = (m_parameters.Q * m_gain[i]) + 0.707;
+        float Q = (m_parameters.resonance * m_gain[i]) + 0.707;
         if (Q > 32.) Q = 32.0f;
         m_Q[i] = Q;
     }

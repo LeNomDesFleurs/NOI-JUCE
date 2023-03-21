@@ -14,63 +14,16 @@
 //==============================================================================
 SinensisAudioProcessor::SinensisAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (
-         BusesProperties()
+     : AudioProcessor (BusesProperties()
 #if ! JucePlugin_IsMidiEffect
 #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
 #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-       ),
-#else
-    :
+        ), parameters(*this, nullptr, "PARAMETERS", createParams())
 #endif
-parameters(*this, nullptr, juce::Identifier("PARAMETERS"), {
-    std::make_unique<juce::AudioParameterFloat>(
-        "cutoff_frequency",
-        "cutoff Frequency",
-        juce::NormalisableRange{20.f, 20000.f, 0.1f, 0.2f, false}, 500.f),
-
-    std::make_unique<juce::AudioParameterFloat>(
-        "ratio",
-        "Ratio",
-        juce::NormalisableRange{0.5f, 2.0f, 0.001f}, 1.5f),
-
-    std::make_unique<juce::AudioParameterFloat>(
-        "Q",
-        "Q",
-        juce::NormalisableRange{0.7f, 35.0f, 0.1f}, 20.0f),
-
-    std::make_unique<juce::AudioParameterFloat>(
-        "band_selector",
-        "Number Of Band",
-        juce::NormalisableRange{0.0f, 1.0f, 0.01f}, 0.0f) ,
-
-      std::make_unique<juce::AudioParameterFloat>(
-        "band_selector_mode",
-        "Band Selector Mode",
-        juce::NormalisableRange{0.0f, 2.0f, 1.f}, 0.0f),
-
-    std::make_unique<juce::AudioParameterFloat>(
-        "midi",
-        "Midi",
-        juce::NormalisableRange{0.0f, 2.0f, 1.f}, 0.0f)
-        
-    })
-
-    {
-        cutoffFrequencyParameter = parameters.getRawParameterValue("cutoff_frequency");
-        ratioParameter = parameters.getRawParameterValue("ratio");
-        QParameter = parameters.getRawParameterValue("Q");
-        BandSelectorParameter = parameters.getRawParameterValue("band_selector");
-        bandSelectorModeParameter = parameters.getRawParameterValue("band_selector_mode");
-        midiParameter = parameters.getRawParameterValue("midi");
-    }
-
-
-
-
+    {}
 
 SinensisAudioProcessor::~SinensisAudioProcessor()
 {
@@ -190,46 +143,26 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    bool midi = midiParameter->load() > 0.5;
 
     for (const auto metadata :midiBuffer)                                                                // [9]
     {
         const auto msg = metadata.getMessage();
         if (msg.isNoteOn()) m_note = msg.getNoteNumber();
     }
-        sinensis_parameters.frequency = juce::MidiMessage::getMidiNoteInHertz(m_note);
+        //sinensis_parameters.frequency = juce::MidiMessage::getMidiNoteInHertz(m_note);
         //retrieve param
         //Q
-    
-        sinensis_parameters.Q = QParameter->load();
-   
-        //Number of band
-        sinensis_parameters.band_selector = BandSelectorParameter->load();
-        //Ratio
-        sinensis_parameters.ratio = ratioParameter->load();
-        //frequence
-        if (!midi) {
-        sinensis_parameters.frequency += cutoffFrequencyParameter->load();
-        }
-        //link
-        sinensis_parameters.gain_Q_link = false;
-        //band mode
-       // sinensis_parameters.band_selector_mode = static_cast <int> (bandModeParameter->load());
-        sinensis_parameters.band_selector_mode = bandSelectorModeParameter->load();
-
-        sinensis[0].setParameters(sinensis_parameters);
-        sinensis[1].setParameters(sinensis_parameters);
+    setParam();
 
  
    for (auto channel = 0; channel < 2; ++channel) {
-
         // to access the sample in the channel as a C-style array
         auto channelSamples = buffer.getWritePointer(channel);
 
         // for each sample in the channel
         for (auto n = 0; n < buffer.getNumSamples(); ++n) {
             const auto input = channelSamples[n];
-            channelSamples[n] = sinensis[channel].processSample(input);
+            channelSamples[n] = sinensis[channel].processSample(input, midiBuffer);
         }
     }
  
@@ -261,6 +194,42 @@ void SinensisAudioProcessor::setStateInformation (const void* data, int sizeInBy
 }
 
 //==============================================================================
+
+juce::AudioProcessorValueTreeState::ParameterLayout SinensisAudioProcessor::createParams()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("MIDIMODE", "Midi Mode", juce::StringArray{ "off", "mono", "poly" }, 0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("BANDMODE", "Band Selector Mode", juce::StringArray{ "Low/High", "Odd/Even", "Peak" }, 0));
+   
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("root_frequency", "Root Frequency", juce::NormalisableRange{ 20.f, 20000.f, 0.1f, 0.2f, false }, 500.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RATIO", "Ratio", juce::NormalisableRange{ 0.5f, 2.0f, 0.001f }, 1.5f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RESONANCE","Resonance",juce::NormalisableRange{ 0.7f, 35.0f, 0.1f }, 20.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("band_selector", "Number Of Band", juce::NormalisableRange{ 0.0f, 1.0f, 0.01f }, 0.0f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
+
+    return { params.begin(), params.end() };
+}
+
+void SinensisAudioProcessor::setParam() {
+
+    sinensis_parameters.midi_mode = *parameters.getRawParameterValue("MIDIMODE");
+    sinensis_parameters.band_selector_mode = *parameters.getRawParameterValue("BANDMODE");
+
+    sinensis_parameters.frequency = *parameters.getRawParameterValue("root_frequency");
+    sinensis_parameters.ratio = *parameters.getRawParameterValue("RATIO");
+    sinensis_parameters.resonance = *parameters.getRawParameterValue("resonance");
+    sinensis_parameters.band_selector = *parameters.getRawParameterValue("band_selector");
+
+    sinensis_parameters.attack = *parameters.getRawParameterValue("ATTACK");
+    sinensis_parameters.decay = *parameters.getRawParameterValue("DECAY");
+
+    sinensis[0].setParameters(sinensis_parameters);
+    sinensis[1].setParameters(sinensis_parameters);
+}
+
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {

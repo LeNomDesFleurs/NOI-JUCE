@@ -24,41 +24,51 @@ public:
     struct Parameters{
         int midi_mode;
         int band_selector_mode;
-        float frequency;
+        float root_frequency;
         float resonance;
         float band_selector;
         float ratio;
         float attack;
         float decay;
     };
-    Sinensis(Sinensis::Parameters parameters);
+    Sinensis();
     ~Sinensis();
     void setParameters(Sinensis::Parameters parameters);
-    float processSample(float input, juce::MidiBuffer& midi_buffer);
+    float processSample(float input);
+    float processSinensis(float input, juce::MidiBuffer& midi_buffer);
+    void prepareMidiOff();
+    void prepareMidiMono(juce::MidiBuffer& midi_buffer);
+    void prepareMidiPoly(juce::MidiBuffer& midi_buffer);
+
     void computeGain();
         void computeLowHigh();
         void computeOddEven();
         void computePeak();
-    void computeAttackStep();
-    void computeDecayStep();
+        void processEnvelope(int envelope_index);
+    void computeEnvelopesStep();
+
     void computeQ();
     void prepareBpf();
-    void computeFrequency();
         void computeFrequencyMidiOff();
         void computeFrequencyMidiMono();
         void computeFrequencyMidiPoly();
+
+    void extractMidiMono(juce::MidiBuffer& midi_buffer);
+    void extractMidiPoly(juce::MidiBuffer& midi_buffer);
 
     void setSamplingFrequency(float sampling_frequency);
 
 private:
     Sinensis::Parameters m_parameters;
     noi::Filter::BPF m_bpf[6];
-    float sampling_frequency;
+    float m_sampling_frequency;
     float m_Q[6];
     float m_frequency[6];
     float m_gain[6];
     float m_attack_step;
     float m_decay_step;
-    float m_enveloppe_statut[6];
+    float m_envelope_statut[6];
+    //int m_notes[6];
+    juce::SortedSet<int> m_notes;
 
 };

@@ -22,43 +22,55 @@ public:
 
     //! [drawRotarySlider]
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
-        const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override
+                                       const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override
         //! [drawRotarySlider]
     {
         //! [locals]
-        auto radius = (float)juce::jmin(width / 2, height / 2) - 10.0f;
-        auto centreX = (float)x + (float)width * 0.5f;
-        auto centreY = (float)y + (float)height * 0.5f;
-        auto rx = centreX - radius;
-        auto ry = centreY - radius;
-        auto rw = radius * 2.0f;
-        auto angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-        //! [locals]
+        auto outline = juce::Colours::black;
+        auto fill = juce::Colours::lightgrey;
 
-        //! [outline]
-                // fill
-        //g.setColour(juce::Colours::whitesmoke);
-        //g.fillEllipse(rx, ry, rw, rw);
+        auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat().reduced(10);
 
-        // outline
-        g.setColour(juce::Colours::black);
-        g.drawEllipse(rx, ry, rw, rw, 15.0f);
-        //! [outline]
+        auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
+        auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+        auto lineW = juce::jmin(1.0f, radius * 0.5f);
+        auto arcRadius = radius - lineW * 0.5f;
 
-        //! [path]
-        juce::Path p;
-        auto pointerLength = radius * 0.33f;
-        auto pointerThickness = 7.0f;
-  
-        p.addEllipse(-pointerThickness * 0.5f + 2.0f, -radius, pointerThickness, pointerThickness);
-        p.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
-        //! [path]
+        juce::Path backgroundArc;
+        backgroundArc.addCentredArc(bounds.getCentreX(),
+            bounds.getCentreY(),
+            arcRadius,
+            arcRadius,
+            0.0f,
+            rotaryStartAngle,
+            rotaryEndAngle,
+            true);
 
-        //! [pointer]
-                // pointer
-        g.setColour(juce::Colours::white);
-        g.fillPath(p);
-        //! [pointer]
+        g.setColour(outline);
+        g.strokePath(backgroundArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+
+        if (slider.isEnabled())
+        {
+            juce::Path valueArc;
+            valueArc.addCentredArc(bounds.getCentreX(),
+                bounds.getCentreY(),
+                arcRadius,
+                arcRadius,
+                0.0f,
+                rotaryStartAngle,
+                toAngle,
+                true);
+
+            g.setColour(fill);
+            g.strokePath(valueArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+        }
+
+        //auto thumbWidth = lineW * 2.0f;
+        /*juce::Point<float> thumbPoint(bounds.getCentreX() + arcRadius * std::cos(toAngle - juce::MathConstants<float>::halfPi),
+            bounds.getCentreY() + arcRadius * std::sin(toAngle - juce::MathConstants<float>::halfPi));*/
+
+        g.setColour(slider.findColour(juce::Slider::thumbColourId));
+       // g.fillEllipse(juce::Rectangle<float>(thumbWidth, thumbWidth).withCentre(thumbPoint));
     }
 };
 //==============================================================================
@@ -105,14 +117,13 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>BandSelectorAttachement;
     juce::Label BandSelectorLabel;
 
-    juce::ToggleButton midiButton;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>midiAttachement;
-    juce::Label midiLabel;
+    juce::Slider attackSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>attackAttachement;
+    juce::Label attackLabel;
 
-    juce::Slider BandSelectorModeSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>BandSelectorModeAttachement;
-    juce::Label BandSelectorModeLabel;
-
+    juce::Slider decaySlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>decayAttachement;
+    juce::Label decayLabel;
 
     
 

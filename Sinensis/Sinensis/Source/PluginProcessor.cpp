@@ -143,18 +143,8 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-
-    for (const auto metadata :midiBuffer)                                                                // [9]
-    {
-        const auto msg = metadata.getMessage();
-        if (msg.isNoteOn()) m_note = msg.getNoteNumber();
-    }
-        //sinensis_parameters.frequency = juce::MidiMessage::getMidiNoteInHertz(m_note);
-        //retrieve param
-        //Q
     setParam();
 
- 
    for (auto channel = 0; channel < 2; ++channel) {
         // to access the sample in the channel as a C-style array
         auto channelSamples = buffer.getWritePointer(channel);
@@ -162,7 +152,7 @@ void SinensisAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         // for each sample in the channel
         for (auto n = 0; n < buffer.getNumSamples(); ++n) {
             const auto input = channelSamples[n];
-            channelSamples[n] = sinensis[channel].processSample(input, midiBuffer);
+            channelSamples[n] = sinensis[channel].processSinensis(input, midiBuffer);
         }
     }
  
@@ -214,18 +204,18 @@ juce::AudioProcessorValueTreeState::ParameterLayout SinensisAudioProcessor::crea
 }
 
 void SinensisAudioProcessor::setParam() {
-
-    sinensis_parameters.midi_mode = *parameters.getRawParameterValue("MIDIMODE");
-    sinensis_parameters.band_selector_mode = *parameters.getRawParameterValue("BANDMODE");
-
-    sinensis_parameters.frequency = *parameters.getRawParameterValue("root_frequency");
+    //MODE
+    sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIMODE"));
+    sinensis_parameters.band_selector_mode = static_cast<int> (*parameters.getRawParameterValue("BANDMODE"));
+    //PARAM
+    sinensis_parameters.root_frequency = *parameters.getRawParameterValue("root_frequency");
     sinensis_parameters.ratio = *parameters.getRawParameterValue("RATIO");
-    sinensis_parameters.resonance = *parameters.getRawParameterValue("resonance");
+    sinensis_parameters.resonance = *parameters.getRawParameterValue("RESONANCE");
     sinensis_parameters.band_selector = *parameters.getRawParameterValue("band_selector");
-
+    //ENVELOPPE
     sinensis_parameters.attack = *parameters.getRawParameterValue("ATTACK");
     sinensis_parameters.decay = *parameters.getRawParameterValue("DECAY");
-
+    //SET OBJECT
     sinensis[0].setParameters(sinensis_parameters);
     sinensis[1].setParameters(sinensis_parameters);
 }

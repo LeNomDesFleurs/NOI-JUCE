@@ -21,7 +21,7 @@
 //#include "outils.hpp"
 
 
-const float PI = 3.14159;
+const float PI = 3.14159f;
 
 namespace noi {
 
@@ -77,8 +77,8 @@ namespace noi {
 				m_fc = frequence;
 				m_Q = Q;
 				m_omega = 2.f * PI * (m_fc / 48000.f);
-				m_cosomega = cos(m_omega);
-				m_sinomega = sin(m_omega);
+				m_cosomega = cosf(m_omega);
+				m_sinomega = sinf(m_omega);
 				m_alpha = m_sinomega / (2 * m_Q);
 				computeBiquadCoef();
 			}
@@ -90,12 +90,12 @@ namespace noi {
 				//1500 choosed by experimentation w/ sinensis, self osc around Q = 38
 				feedback *= (m_Q / 1500.F);
 				if (feedback < -0.95) {
-					float overtaking = feedback + 0.95;
-					feedback = -0.95 - (overtaking / 5.);
+					float overtaking = feedback + 0.95f;
+					feedback = -0.95f - (overtaking / 5.f);
 				}
-				if (feedback > 0.95) {
-					float overtaking = feedback - 0.95;
-					feedback = 0.95 + (overtaking / 5.);
+				if (feedback > 0.95f) {
+					float overtaking = feedback - 0.95f;
+					feedback = 0.95f + (overtaking / 5.f);
 				}
 				if (feedback > 1.0f) { feedback = 1.0f; }
 				if (feedback < -1.0f) { feedback =-1.0f; }

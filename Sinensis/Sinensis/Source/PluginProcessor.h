@@ -64,10 +64,8 @@ private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
 
     juce::AudioProcessorValueTreeState parameters;
-
-    int m_note = 0;
-    Sinensis::Parameters sinensis_parameters {0,0, 218., 0.707, 0., 1.5, 0.4, 0.4};
-    Sinensis sinensis[2] = { Sinensis(sinensis_parameters), Sinensis(sinensis_parameters) };
+    Sinensis::Parameters sinensis_parameters{ 0, 0, 218.f, 0.707f, 0.f, 1.5f, 0.4f, 0.4f };
+    Sinensis sinensis[2];
 
 
    

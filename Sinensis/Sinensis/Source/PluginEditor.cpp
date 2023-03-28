@@ -15,20 +15,6 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     SinensisAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor(&p), audioProcessor(p) {
     const int text_box_width = 50;
-    //-----------------------------------------------------
-    juce::StringArray band_mode_choice{ "Low/High", "Odd/Even", "Peak" };
-    bandModeSelector.addItemList(band_mode_choice, 1);
-    bandModeSelector.setSelectedItemIndex(0);
-    addAndMakeVisible(bandModeSelector);
-
-    bandModeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "BANDMODE", bandModeSelector);
-    //-----------------------------------------------------
-    juce::StringArray midi_mode_choice{ "Off", "Mono", "Poly" };
-    midiModeSelector.addItemList(midi_mode_choice, 1);
-    midiModeSelector.setSelectedItemIndex(0);
-    addAndMakeVisible(midiModeSelector);
-
-    midiModeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "MIDIMODE", midiModeSelector);
     //------------------------------------------------------
     //FrequencyStuff.addAndMakeVisible(cutoffFrequencySlider);
     addAndMakeVisible(cutoffFrequencySlider);
@@ -181,15 +167,6 @@ void SinensisAudioProcessorEditor::paint (juce::Graphics& g)
 void SinensisAudioProcessorEditor::resized()
 {
     const int marge_haute_slider = 60;
-
-    //FrequencyStuff.setBounds({ 10, marge_haute_slider, 100, 100 });
-
-    //MidiChoice.setBounds(10, 10, 100, 100);
-
-    bandModeSelector.setBounds(275, 10, 100, 25);
-
-    midiModeSelector.setBounds(10, 10, 100, 25);
-
     
     midiOffButton.setBounds(200, 200, 0, 25);
     midiOffButton.changeWidthToFitText();

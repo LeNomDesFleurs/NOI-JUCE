@@ -214,11 +214,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout SinensisAudioProcessor::crea
 
 void SinensisAudioProcessor::setParam() {
     //MODE
-    //sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIMODE"));
-    //auto test = parameters.getParameter("RATIO");
-    //test->
-    // 
-    //sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIOFF"));
     if (*parameters.getRawParameterValue("MIDIMONO")) sinensis_parameters.midi_mode = 1;
     else if (*parameters.getRawParameterValue("MIDIPOLY")) sinensis_parameters.midi_mode = 2;
     else sinensis_parameters.midi_mode = 0;
@@ -226,8 +221,6 @@ void SinensisAudioProcessor::setParam() {
     if (*parameters.getRawParameterValue("LOWHIGH")) sinensis_parameters.band_selector_mode = 0;
     else if(*parameters.getRawParameterValue("ODDEVEN")) sinensis_parameters.band_selector_mode = 1;
     else sinensis_parameters.band_selector_mode = 2;
-
-    //sinensis_parameters.band_selector_mode = static_cast<int> (*parameters.getRawParameterValue("BANDMODE"));
     //PARAM
     sinensis_parameters.root_frequency = *parameters.getRawParameterValue("root_frequency");
     sinensis_parameters.ratio = *parameters.getRawParameterValue("RATIO");

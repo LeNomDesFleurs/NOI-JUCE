@@ -33,22 +33,42 @@ float Sinensis::processSample(float input) {
     for (int i = 0; i < 6; i++) {
         output += m_bpf[i].process(input) * m_gain[i];
     }
-    if (output > 1.0f) output = 1.0f;
-    if (output < -1.0f) output = -1.0f;
+    attenuate(output);
+    //saturate(output);
     return output;
 }
 
 float Sinensis::processSinensis(float input, juce::MidiBuffer& midi_buffer) {
-
+ 
     switch (m_parameters.midi_mode) {
     case 0:prepareMidiOff(); break;
     case 1:prepareMidiMono(midi_buffer); break;
     case 2:prepareMidiPoly(midi_buffer); break;
     }
-
     return processSample(input);
- 
 }
+
+void Sinensis::attenuate(float& input) {
+    input *= m_parameters.output_volume;
+}
+
+void Sinensis::saturate(float& input) {
+    float max = 1.f;
+    float threshold = 0.9;
+    if ((input < -threshold && m_saturation_memory < -threshold) || (input > threshold && m_saturation_memory > threshold)) {
+        float slope = input - m_saturation_memory; //one sample period as unity time
+        float offset = input < 0.f ? -threshold : threshold;
+        slope *= 1.f - ((m_saturation_memory + offset) * 10.f); //higher input higher divider
+        input = m_saturation_memory + slope;
+    }
+    //additionnal clipping
+    if (input < -max) input = -max;
+    if (input > max) input = max;
+
+    m_saturation_memory = input;
+}
+
+
 
 void Sinensis::prepareMidiOff() {
     computeFrequencyMidiOff();
@@ -61,7 +81,7 @@ void Sinensis::prepareMidiMono(juce::MidiBuffer& midi_buffer) {
     extractMidiMono(midi_buffer);
     computeFrequencyMidiMono();
     computeEnvelopesStep();
-    processEnvelope(0);
+    processEnvelopeMono();
     computeGain();
     for (int i = 0; i < 6; i++) {
         m_gain[i] *= m_envelope_statut[0];
@@ -74,7 +94,7 @@ void Sinensis::prepareMidiPoly(juce::MidiBuffer& midi_buffer) {
     computeFrequencyMidiPoly();
     computeEnvelopesStep();
     for (int i = 0; i < 6; i++) {
-        processEnvelope(i);
+        processEnvelopePoly(i);
         m_gain[i] = m_envelope_statut[i];
     }
     computeQ();
@@ -99,8 +119,8 @@ void Sinensis::computeFrequencyMidiOff() {
 }
 
 void Sinensis::computeFrequencyMidiMono() {
-    if (m_notes[0] == 0) return;
-    m_parameters.root_frequency = juce::MidiMessage::getMidiNoteInHertz(m_notes[0]);
+    if (m_notes.getLast() == 0) return;
+    m_parameters.root_frequency = juce::MidiMessage::getMidiNoteInHertz(m_notes.getLast());
     computeFrequencyMidiOff();
 
 }
@@ -172,11 +192,18 @@ void Sinensis::computePeak() {
         }
 }
 
-void Sinensis::processEnvelope(int i) {
+void Sinensis::processEnvelopePoly(int i) {
     if (m_notes[i] == 0) m_envelope_statut[i] -= m_decay_step;
     else m_envelope_statut[i] += m_attack_step;
     if (m_envelope_statut[i] > 1) m_envelope_statut[i] = 1;
     if (m_envelope_statut[i] < 0) m_envelope_statut[i] = 0;
+}
+
+void Sinensis::processEnvelopeMono() {
+    if (m_notes.getLast() == 0) m_envelope_statut[0] -= m_decay_step;
+    else m_envelope_statut[0] += m_attack_step;
+    if (m_envelope_statut[0] > 1) m_envelope_statut[0] = 1;
+    if (m_envelope_statut[0] < 0) m_envelope_statut[0] = 0;
 }
 
 void Sinensis::computeEnvelopesStep() {
@@ -201,19 +228,12 @@ void Sinensis::prepareBpf() {
 
 void Sinensis::extractMidiMono(juce::MidiBuffer& midi_buffer) {
 
-   /* for (const auto metadata : midi_buffer)
+    for (const auto metadata : midi_buffer)
     {
         const auto msg = metadata.getMessage();
-
-        if (msg.isNoteOff()) { m_notes[0] = 0; }
-        else if (msg.isNoteOn()) m_notes[0] = msg.getNoteNumber();
+        if (msg.isNoteOn()) m_notes.add(msg.getNoteNumber());
+        else if (msg.isNoteOff()) m_notes.removeValue(msg.getNoteNumber());
     }
-
-    {
-        const auto msg = metadata.getMessage();
-        if (msg.isNoteOn())  notes.add(msg.getNoteNumber());
-        else if (msg.isNoteOff()) notes.removeValue(msg.getNoteNumber());
-    }*/
 }
 
 void Sinensis::extractMidiPoly(juce::MidiBuffer& midi_buffer) {
@@ -231,3 +251,4 @@ void Sinensis::setSamplingFrequency(float sampling_frequency) {
     for (auto bpf : m_bpf) bpf.setSamplingFrequency(sampling_frequency);
     m_sampling_frequency = sampling_frequency;
 }
+

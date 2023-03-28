@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "MultipleChoice.h"
 
 class OtherLookAndFeel : public juce::LookAndFeel_V4
 {
@@ -95,18 +96,25 @@ private:
     // access the processor object that created it.
     SinensisAudioProcessor& audioProcessor;
 
+    Component FrequencyStuff;
+
+    juce::Font defaultFont = juce::Font();
+    juce::TextButton testButton{ "test" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>testButtonAttachement;
+
+
     juce::ComboBox bandModeSelector;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>bandModeAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>bandModeAttachement;
 
     juce::ComboBox midiModeSelector;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>midiModeAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>midiModeAttachement;
 
     juce::Slider cutoffFrequencySlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>cutoffFrequencyAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>cutoffFrequencyAttachement;
     juce::Label cutoffFrequencyLabel;
 
     juce::Slider ratioSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>ratioAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>ratioAttachement;
     juce::Label ratioLabel;
 
     juce::Slider QSlider;
@@ -117,6 +125,10 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>BandSelectorAttachement;
     juce::Label BandSelectorLabel;
 
+    juce::Slider outputVolumeSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>outputVolumeAttachement;
+    juce::Label outputVolumeLabel;
+
     juce::Slider attackSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>attackAttachement;
     juce::Label attackLabel;
@@ -125,6 +137,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>decayAttachement;
     juce::Label decayLabel;
 
+    //MultipleChoice MidiChoice;
     
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SinensisAudioProcessorEditor)

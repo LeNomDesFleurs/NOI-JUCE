@@ -6,9 +6,14 @@
               pluginCharacteristicsValue="pluginWantsMidiIn">
   <MAINGROUP id="uHaB5W" name="Sinensis">
     <GROUP id="{E2A03FD0-E1AE-EF2B-E602-EA2B64153762}" name="Source">
-      <FILE id="j2TeYw" name="Sinensis.h" compile="0" resource="0" file="Source/Sinensis.h"/>
-      <FILE id="rfBeSj" name="Sinensis.cpp" compile="1" resource="0" file="Source/Sinensis.cpp"/>
-      <FILE id="gJ3HU8" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+      <GROUP id="{98F56156-588B-CED0-1FDF-93748C0A4EF3}" name="GUI"/>
+      <GROUP id="{F8C8763C-5532-A133-26DC-DD4F7A967DA3}" name="DSP">
+        <FILE id="j2TeYw" name="Sinensis.h" compile="0" resource="0" file="Source/Sinensis.h"/>
+        <FILE id="gJ3HU8" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+        <FILE id="rfBeSj" name="Sinensis.cpp" compile="1" resource="0" file="Source/Sinensis.cpp"/>
+      </GROUP>
+      <FILE id="lPTVvK" name="MultipleChoice.h" compile="0" resource="0"
+            file="Source/MultipleChoice.h"/>
       <FILE id="ZLKIty" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="LA3lnT" name="PluginProcessor.h" compile="0" resource="0"

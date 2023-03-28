@@ -192,13 +192,16 @@ juce::AudioProcessorValueTreeState::ParameterLayout SinensisAudioProcessor::crea
     params.push_back(std::make_unique<juce::AudioParameterChoice>("MIDIMODE", "Midi Mode", juce::StringArray{ "off", "mono", "poly" }, 0));
     params.push_back(std::make_unique<juce::AudioParameterChoice>("BANDMODE", "Band Selector Mode", juce::StringArray{ "Low/High", "Odd/Even", "Peak" }, 0));
    
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("root_frequency", "Root Frequency", juce::NormalisableRange{ 20.f, 20000.f, 0.1f, 0.2f, false }, 500.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("root_frequency", "Root Frequency", juce::NormalisableRange{ 20.f, 20000.f, 0.1f, 0.2f, false }, 500.f)),
     params.push_back(std::make_unique<juce::AudioParameterFloat>("RATIO", "Ratio", juce::NormalisableRange{ 0.5f, 2.0f, 0.001f }, 1.5f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("RESONANCE","Resonance",juce::NormalisableRange{ 0.7f, 35.0f, 0.1f }, 20.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("band_selector", "Number Of Band", juce::NormalisableRange{ 0.0f, 1.0f, 0.01f }, 0.0f));
+    params.push_back(std::make_unique <juce::AudioParameterFloat>("OUTPUTVOLUME", "Ouput Volume", juce::NormalisableRange{ 0.0f, 2.0f, 0.01f }, 0.6f));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
+
+    params.push_back(std::make_unique<juce::AudioParameterBool>("TEST", "Decay", false));
 
     return { params.begin(), params.end() };
 }
@@ -206,12 +209,18 @@ juce::AudioProcessorValueTreeState::ParameterLayout SinensisAudioProcessor::crea
 void SinensisAudioProcessor::setParam() {
     //MODE
     sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIMODE"));
+    //auto test = parameters.getParameter("RATIO");
+    //test->
+    // 
+    //sinensis_parameters.band_selector_mode = static_cast<int> (*parameters.getRawParameterValue("TEST"));
+
     sinensis_parameters.band_selector_mode = static_cast<int> (*parameters.getRawParameterValue("BANDMODE"));
     //PARAM
     sinensis_parameters.root_frequency = *parameters.getRawParameterValue("root_frequency");
     sinensis_parameters.ratio = *parameters.getRawParameterValue("RATIO");
     sinensis_parameters.resonance = *parameters.getRawParameterValue("RESONANCE");
     sinensis_parameters.band_selector = *parameters.getRawParameterValue("band_selector");
+    sinensis_parameters.output_volume = *parameters.getRawParameterValue("OUTPUTVOLUME");
     //ENVELOPPE
     sinensis_parameters.attack = *parameters.getRawParameterValue("ATTACK");
     sinensis_parameters.decay = *parameters.getRawParameterValue("DECAY");

@@ -21,32 +21,49 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     bandModeSelector.setSelectedItemIndex(0);
     addAndMakeVisible(bandModeSelector);
 
-    bandModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "BANDMODE", bandModeSelector);
+    bandModeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "BANDMODE", bandModeSelector);
     //-----------------------------------------------------
     juce::StringArray midi_mode_choice{ "Off", "Mono", "Poly" };
     midiModeSelector.addItemList(midi_mode_choice, 1);
     midiModeSelector.setSelectedItemIndex(0);
     addAndMakeVisible(midiModeSelector);
 
-    midiModeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "MIDIMODE", midiModeSelector);
+    midiModeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(vts, "MIDIMODE", midiModeSelector);
     //------------------------------------------------------
+    //FrequencyStuff.addAndMakeVisible(cutoffFrequencySlider);
     addAndMakeVisible(cutoffFrequencySlider);
     cutoffFrequencySlider.setLookAndFeel(&otherLookAndFeel);
     cutoffFrequencySlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    cutoffFrequencyAttachment.reset(
+    cutoffFrequencyAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
         (vts, "root_frequency", cutoffFrequencySlider));
     cutoffFrequencySlider.setTextBoxStyle(juce::Slider::NoTextBox, false, text_box_width, cutoffFrequencySlider.getTextBoxHeight());
 
+    //FrequencyStuff.setVisible(*vts.getRawParameterValue("MIDIMODE") == 0);
     addAndMakeVisible(cutoffFrequencyLabel);
     cutoffFrequencyLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     cutoffFrequencyLabel.setText("Root Frequency",
+        juce::dontSendNotification);
+    //------------------------------------------------------
+ //FrequencyStuff.addAndMakeVisible(cutoffFrequencySlider);
+    addAndMakeVisible(outputVolumeSlider);
+    outputVolumeSlider.setLookAndFeel(&otherLookAndFeel);
+    outputVolumeSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    outputVolumeAttachement.reset(
+        new juce::AudioProcessorValueTreeState::SliderAttachment
+        (vts, "OUTPUTVOLUME", outputVolumeSlider));
+    outputVolumeSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, text_box_width, outputVolumeSlider.getTextBoxHeight());
+
+    //FrequencyStuff.setVisible(*vts.getRawParameterValue("MIDIMODE") == 0);
+    addAndMakeVisible(outputVolumeLabel);
+    outputVolumeLabel.setColour(juce::Label::textColourId, juce::Colours::black);
+    outputVolumeLabel.setText("Out Volume",
         juce::dontSendNotification);
     //-------------------------------------------------------
     addAndMakeVisible(ratioSlider);
     ratioSlider.setLookAndFeel(&otherLookAndFeel);
     ratioSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    ratioAttachment.reset(
+    ratioAttachement.reset(
         new juce::AudioProcessorValueTreeState::SliderAttachment
         (vts, "RATIO", ratioSlider));
     ratioSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, text_box_width, ratioSlider.getTextBoxHeight());
@@ -106,8 +123,14 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     decayLabel.setText("Decay", juce::dontSendNotification);
     //midiButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "midi", midiButton));
 
-
-    setSize(480, 190);
+    addAndMakeVisible(testButton);
+    testButtonAttachement.reset(
+        new juce::AudioProcessorValueTreeState::ButtonAttachment
+        (vts, "TEST", testButton));
+    testButton.setClickingTogglesState(true);
+    //addAndMakeVisible(MidiChoice);
+    //setSize(480, 190);
+    setSize(480, 300);
 }
 
 SinensisAudioProcessorEditor::~SinensisAudioProcessorEditor()
@@ -132,9 +155,20 @@ void SinensisAudioProcessorEditor::resized()
 {
     const int marge_haute_slider = 60;
 
+    //FrequencyStuff.setBounds({ 10, marge_haute_slider, 100, 100 });
+
+    //MidiChoice.setBounds(10, 10, 100, 100);
+
     bandModeSelector.setBounds(275, 10, 100, 25);
 
     midiModeSelector.setBounds(10, 10, 100, 25);
+
+    juce::String testText{ "Test" };
+    int width = defaultFont.getStringWidth(testText);
+    testButton.setBounds(200, 200, width, 25);
+
+    outputVolumeSlider.setBounds({ 10, marge_haute_slider + 100, 50, 50 });
+    outputVolumeLabel.setBounds({ outputVolumeSlider.getX() - 8, outputVolumeSlider.getY() - 30, 200, 50 });
 
     cutoffFrequencySlider.setBounds({ 10, marge_haute_slider, 100, 100 });
     cutoffFrequencyLabel.setBounds({ cutoffFrequencySlider.getX() - 8, cutoffFrequencySlider.getY() - 30, 200, 50 });
@@ -154,6 +188,8 @@ void SinensisAudioProcessorEditor::resized()
     decaySlider.setBounds({ 400, marge_haute_slider + 70, 70, 70 });
     decayLabel.setBounds({ decaySlider.getX() - 5, decaySlider.getY() - 30,200, 50 });
 
- 
+   // cutoffFrequencyAttachment = 5000.f;
+
+
 
 }

@@ -10,7 +10,6 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "MultipleChoice.h"
 
 class OtherLookAndFeel : public juce::LookAndFeel_V4
 {
@@ -110,12 +109,6 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>oddEvenButtonAttachement;
     juce::TextButton peakButton{ "Peak" };
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>peakButtonAttachement;
-
-    juce::ComboBox bandModeSelector;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>bandModeAttachement;
-
-    juce::ComboBox midiModeSelector;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>midiModeAttachement;
 
     juce::Slider cutoffFrequencySlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>cutoffFrequencyAttachement;

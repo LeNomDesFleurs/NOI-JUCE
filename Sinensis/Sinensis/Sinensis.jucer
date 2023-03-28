@@ -12,8 +12,6 @@
         <FILE id="gJ3HU8" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
         <FILE id="rfBeSj" name="Sinensis.cpp" compile="1" resource="0" file="Source/Sinensis.cpp"/>
       </GROUP>
-      <FILE id="lPTVvK" name="MultipleChoice.h" compile="0" resource="0"
-            file="Source/MultipleChoice.h"/>
       <FILE id="ZLKIty" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="LA3lnT" name="PluginProcessor.h" compile="0" resource="0"

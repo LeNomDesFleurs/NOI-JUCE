@@ -123,11 +123,22 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     decayLabel.setText("Decay", juce::dontSendNotification);
     //midiButton.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "midi", midiButton));
 
-    addAndMakeVisible(testButton);
-    testButtonAttachement.reset(
-        new juce::AudioProcessorValueTreeState::ButtonAttachment
-        (vts, "TEST", testButton));
-    testButton.setClickingTogglesState(true);
+    addAndMakeVisible(midiOffButton);
+    midiOffButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "MIDIOFF", midiOffButton));
+    midiOffButton.setClickingTogglesState(true);
+
+    addAndMakeVisible(midiMonoButton);
+    midiMonoButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "MIDIMONO", midiMonoButton));
+    midiMonoButton.setClickingTogglesState(true);
+
+    addAndMakeVisible(midiPolyButton);
+    midiPolyButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "MIDIPOLY", midiPolyButton));
+    midiPolyButton.setClickingTogglesState(true);
+
+    midiOffButton.setRadioGroupId(1);
+    midiMonoButton.setRadioGroupId(1);
+    midiPolyButton.setRadioGroupId(1);
+
     //addAndMakeVisible(MidiChoice);
     //setSize(480, 190);
     setSize(480, 300);
@@ -163,9 +174,13 @@ void SinensisAudioProcessorEditor::resized()
 
     midiModeSelector.setBounds(10, 10, 100, 25);
 
-    juce::String testText{ "Test" };
-    int width = defaultFont.getStringWidth(testText);
-    testButton.setBounds(200, 200, width, 25);
+    
+    midiOffButton.setBounds(200, 200, 0, 25);
+    midiOffButton.changeWidthToFitText();
+    midiMonoButton.setBounds(200, 200 + 25, 0, 25);
+    midiMonoButton.changeWidthToFitText();
+    midiPolyButton.setBounds(200, 200 + 50, 0, 25);
+    midiPolyButton.changeWidthToFitText();
 
     outputVolumeSlider.setBounds({ 10, marge_haute_slider + 100, 50, 50 });
     outputVolumeLabel.setBounds({ outputVolumeSlider.getX() - 8, outputVolumeSlider.getY() - 30, 200, 50 });

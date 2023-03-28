@@ -96,12 +96,13 @@ private:
     // access the processor object that created it.
     SinensisAudioProcessor& audioProcessor;
 
-    Component FrequencyStuff;
 
-    juce::Font defaultFont = juce::Font();
-    juce::TextButton testButton{ "test" };
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>testButtonAttachement;
-
+    juce::TextButton midiOffButton{ "Off" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>midiOffButtonAttachement;
+    juce::TextButton midiMonoButton{ "Mono" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>midiMonoButtonAttachement;
+    juce::TextButton midiPolyButton{ "Poly" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>midiPolyButtonAttachement;
 
     juce::ComboBox bandModeSelector;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>bandModeAttachement;

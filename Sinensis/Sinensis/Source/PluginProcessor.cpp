@@ -201,18 +201,23 @@ juce::AudioProcessorValueTreeState::ParameterLayout SinensisAudioProcessor::crea
     params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
 
-    params.push_back(std::make_unique<juce::AudioParameterBool>("TEST", "Decay", false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("MIDIOFF", "Midi Off", true));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("MIDIMONO", "Midi Mono", false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("MIDIPOLY", "Midi Poly", false));
 
     return { params.begin(), params.end() };
 }
 
 void SinensisAudioProcessor::setParam() {
     //MODE
-    sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIMODE"));
+    //sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIMODE"));
     //auto test = parameters.getParameter("RATIO");
     //test->
     // 
-    //sinensis_parameters.band_selector_mode = static_cast<int> (*parameters.getRawParameterValue("TEST"));
+    //sinensis_parameters.midi_mode = static_cast<int> (*parameters.getRawParameterValue("MIDIOFF"));
+    if (*parameters.getRawParameterValue("MIDIMONO")) sinensis_parameters.midi_mode = 1;
+    else if (*parameters.getRawParameterValue("MIDIPOLY")) sinensis_parameters.midi_mode = 2;
+    else sinensis_parameters.midi_mode = 0;
 
     sinensis_parameters.band_selector_mode = static_cast<int> (*parameters.getRawParameterValue("BANDMODE"));
     //PARAM

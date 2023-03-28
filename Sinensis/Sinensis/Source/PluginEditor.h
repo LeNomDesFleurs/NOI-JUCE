@@ -104,6 +104,13 @@ private:
     juce::TextButton midiPolyButton{ "Poly" };
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>midiPolyButtonAttachement;
 
+    juce::TextButton lowHighButton{ "Low | High" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>lowHighButtonAttachement;
+    juce::TextButton oddEvenButton{ "Odd | Even" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>oddEvenButtonAttachement;
+    juce::TextButton peakButton{ "Peak" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>peakButtonAttachement;
+
     juce::ComboBox bandModeSelector;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>bandModeAttachement;
 

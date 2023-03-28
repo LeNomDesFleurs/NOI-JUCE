@@ -139,6 +139,22 @@ SinensisAudioProcessorEditor::SinensisAudioProcessorEditor(
     midiMonoButton.setRadioGroupId(1);
     midiPolyButton.setRadioGroupId(1);
 
+    addAndMakeVisible(lowHighButton);
+    lowHighButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "LOWHIGH", lowHighButton));
+    lowHighButton.setClickingTogglesState(true);
+
+    addAndMakeVisible(oddEvenButton);
+    oddEvenButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "ODDEVEN", oddEvenButton));
+    oddEvenButton.setClickingTogglesState(true);
+
+    addAndMakeVisible(peakButton);
+    peakButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(vts, "PEAK", peakButton));
+    peakButton.setClickingTogglesState(true);
+
+    lowHighButton.setRadioGroupId(2);
+    oddEvenButton.setRadioGroupId(2);
+    peakButton.setRadioGroupId(2);
+
     //addAndMakeVisible(MidiChoice);
     //setSize(480, 190);
     setSize(480, 300);
@@ -181,6 +197,13 @@ void SinensisAudioProcessorEditor::resized()
     midiMonoButton.changeWidthToFitText();
     midiPolyButton.setBounds(200, 200 + 50, 0, 25);
     midiPolyButton.changeWidthToFitText();
+
+    lowHighButton.setBounds(400, 200, 0, 25);
+    lowHighButton.changeWidthToFitText();
+    oddEvenButton.setBounds(400, 200 + 25, 0, 25);
+    oddEvenButton.changeWidthToFitText();
+    peakButton.setBounds(400, 200 + 50, 0, 25);
+    peakButton.changeWidthToFitText();
 
     outputVolumeSlider.setBounds({ 10, marge_haute_slider + 100, 50, 50 });
     outputVolumeLabel.setBounds({ outputVolumeSlider.getX() - 8, outputVolumeSlider.getY() - 30, 200, 50 });

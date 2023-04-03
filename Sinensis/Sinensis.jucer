@@ -6,7 +6,23 @@
               pluginCharacteristicsValue="pluginWantsMidiIn">
   <MAINGROUP id="uHaB5W" name="Sinensis">
     <GROUP id="{E2A03FD0-E1AE-EF2B-E602-EA2B64153762}" name="Source">
-      <GROUP id="{98F56156-588B-CED0-1FDF-93748C0A4EF3}" name="GUI"/>
+      <GROUP id="{98F56156-588B-CED0-1FDF-93748C0A4EF3}" name="GUI">
+        <FILE id="f3BrC3" name="BandControl.cpp" compile="1" resource="0" file="Source/BandControl.cpp"/>
+        <FILE id="B1fQTU" name="BandControl.h" compile="0" resource="0" file="Source/BandControl.h"/>
+        <FILE id="plFRea" name="LookAndFeel.cpp" compile="1" resource="0" file="Source/LookAndFeel.cpp"/>
+        <FILE id="VgciLP" name="LookAndFeel.h" compile="0" resource="0" file="Source/LookAndFeel.h"/>
+        <FILE id="d33SRa" name="MidiControl.cpp" compile="1" resource="0" file="Source/MidiControl.cpp"/>
+        <FILE id="rvAeWV" name="MidiControl.h" compile="0" resource="0" file="Source/MidiControl.h"/>
+        <FILE id="jB8g7C" name="ModeSelector.cpp" compile="1" resource="0"
+              file="Source/ModeSelector.cpp"/>
+        <FILE id="m8iWWX" name="ModeSelector.h" compile="0" resource="0" file="Source/ModeSelector.h"/>
+        <FILE id="GIL8W5" name="PlaceHolder.cpp" compile="1" resource="0" file="Source/PlaceHolder.cpp"/>
+        <FILE id="dalzYW" name="PlaceHolder.h" compile="0" resource="0" file="Source/PlaceHolder.h"/>
+        <FILE id="ThFi0h" name="Q.cpp" compile="1" resource="0" file="Source/Q.cpp"/>
+        <FILE id="d8H6CM" name="Q.h" compile="0" resource="0" file="Source/Q.h"/>
+        <FILE id="zNKvh8" name="Title.cpp" compile="1" resource="0" file="Source/Title.cpp"/>
+        <FILE id="SrnAvI" name="Title.h" compile="0" resource="0" file="Source/Title.h"/>
+      </GROUP>
       <GROUP id="{F8C8763C-5532-A133-26DC-DD4F7A967DA3}" name="DSP">
         <FILE id="j2TeYw" name="Sinensis.h" compile="0" resource="0" file="Source/Sinensis.h"/>
         <FILE id="gJ3HU8" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>

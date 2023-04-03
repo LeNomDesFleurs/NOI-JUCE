@@ -59,11 +59,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     void setParam();
 
+    juce::AudioProcessorValueTreeState parameters;
 private:
     //==============================================================================
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
 
-    juce::AudioProcessorValueTreeState parameters;
     Sinensis::Parameters sinensis_parameters{ 0, 0, 218.f, 0.707f, 0.f, 1.5f, 0.4f, 0.4f, 0.5f };
     Sinensis sinensis[2];
 

@@ -61,44 +61,7 @@ void SinensisAudioProcessorEditor::paint (juce::Graphics& g)
 void SinensisAudioProcessorEditor::resized()
 {
     const int marge_haute_slider = 60;
-    /*
-    midiOffButton.setBounds(200, 200, 0, 25);
-    midiOffButton.changeWidthToFitText();
-    midiMonoButton.setBounds(200, 200 + 25, 0, 25);
-    midiMonoButton.changeWidthToFitText();
-    midiPolyButton.setBounds(200, 200 + 50, 0, 25);
-    midiPolyButton.changeWidthToFitText();
 
-    lowHighButton.setBounds(400, 200, 0, 25);
-    lowHighButton.changeWidthToFitText();
-    oddEvenButton.setBounds(400, 200 + 25, 0, 25);
-    oddEvenButton.changeWidthToFitText();
-    peakButton.setBounds(400, 200 + 50, 0, 25);
-    peakButton.changeWidthToFitText();
-
-    outputVolumeSlider.setBounds({ 10, marge_haute_slider + 100, 50, 50 });
-    outputVolumeLabel.setBounds({ outputVolumeSlider.getX() - 8, outputVolumeSlider.getY() - 30, 200, 50 });
-
-    cutoffFrequencySlider.setBounds({ 10, marge_haute_slider, 100, 100 });
-    cutoffFrequencyLabel.setBounds({ cutoffFrequencySlider.getX() - 8, cutoffFrequencySlider.getY() - 30, 200, 50 });
-
-    ratioSlider.setBounds({ 100, marge_haute_slider, 100, 100 });
-    ratioLabel.setBounds({ ratioSlider.getX() + 30, ratioSlider.getY() - 30,200, 50 });
-
-    QSlider.setBounds({ 190, marge_haute_slider, 100, 100 });
-    QLabel.setBounds({ QSlider.getX() + 10, QSlider.getY() - 30, 200, 50 });
-
-    BandSelectorSlider.setBounds({ 275, marge_haute_slider, 100, 100 });
-    BandSelectorLabel.setBounds({ BandSelectorSlider.getX() - 5, BandSelectorSlider.getY() - 30,200, 50 });
-
-    attackSlider.setBounds({ 400, marge_haute_slider, 70, 70 });
-    attackLabel.setBounds({ attackSlider.getX() - 5, attackSlider.getY() - 30,200, 50 });
-
-    decaySlider.setBounds({ 400, marge_haute_slider + 70, 70, 70 });
-    decayLabel.setBounds({ decaySlider.getX() - 5, decaySlider.getY() - 30,200, 50 });
-
-   // cutoffFrequencyAttachment = 5000.f;
-   */
     auto bounds = getLocalBounds();
 
     bounds.reduce(20, 20);
@@ -107,6 +70,5 @@ void SinensisAudioProcessorEditor::resized()
     title.setBounds(bounds.removeFromTop(100));
     bandControl.setBounds(bounds.removeFromRight(600));
     Q.setBounds(bounds);
-
 
 }

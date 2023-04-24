@@ -20,12 +20,8 @@ BandControl::BandControl(juce::AudioProcessorValueTreeState& apvts)
     ratioSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
     BandSelectorSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
 
-    ratioAttachement.reset(
-        new juce::AudioProcessorValueTreeState::SliderAttachment
-        (apvts, "RATIO", ratioSlider));
-    BandSelectorAttachement.reset(
-        new juce::AudioProcessorValueTreeState::SliderAttachment
-        (apvts, "band_selector", BandSelectorSlider));
+    ratioAttachement.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, "RATIO", ratioSlider));
+    BandSelectorAttachement.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, "band_selector", BandSelectorSlider));
 
     ratioSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, ratioSlider.getTextBoxHeight());
     BandSelectorSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0,  BandSelectorSlider.getTextBoxHeight());
@@ -45,11 +41,14 @@ BandControl::BandControl(juce::AudioProcessorValueTreeState& apvts)
     addAndMakeVisible(BandSelectorSlider);
     addAndMakeVisible(BandSelectorLabel);
 
-    
     lowHighButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(apvts, "LOWHIGH", lowHighButton));
     oddEvenButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(apvts, "ODDEVEN", oddEvenButton));
     peakButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(apvts, "PEAK", peakButton));
-    
+
+    peakButton.setLookAndFeel(&otherLookAndFeel);
+    lowHighButton.setLookAndFeel(&otherLookAndFeel);
+    oddEvenButton.setLookAndFeel(&otherLookAndFeel);
+
     lowHighButton.setClickingTogglesState(true);
     oddEvenButton.setClickingTogglesState(true);
     peakButton.setClickingTogglesState(true);
@@ -74,8 +73,8 @@ void BandControl::paint(juce::Graphics& g)
 
 void BandControl::resized() {
 
-    auto bounds = getLocalBounds().reduced(5);
-
+    auto bounds = getLocalBounds().reduced(20);
+    
     using namespace juce;
 
     auto createBandButtonControlBox = [](std::vector<Component*> comps)
@@ -88,7 +87,7 @@ void BandControl::resized() {
         flexBox.items.add(marge);
         for (auto* comp : comps)
         {
-            flexBox.items.add(spacer);
+           // flexBox.items.add(spacer);
             flexBox.items.add(FlexItem(*comp).withFlex(1.f));
         }
 
@@ -113,13 +112,9 @@ void BandControl::resized() {
     flexBox.items.add(spacer);
     flexBox.items.add(FlexItem(BandSelectorSlider).withFlex(1.f));
     flexBox.items.add(spacer);
-    flexBox.items.add(FlexItem(bandModeControlBox).withWidth(100));
+    flexBox.items.add(FlexItem(bandModeControlBox).withFlex(0.5f));
+    //flexBox.items.add(FlexItem(bandModeControlBox).withWidth(100));
     flexBox.items.add(spacer);
-    /*
-    flexBox.items.add(FlexItem(*midHighXoverSlider).withFlex(1.f));
-    flexBox.items.add(spacer);
-    flexBox.items.add(FlexItem(*outGainSlider).withFlex(1.f));
-    */
     flexBox.items.add(endCap);
 
     flexBox.performLayout(bounds);

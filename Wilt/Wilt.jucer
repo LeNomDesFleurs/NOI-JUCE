@@ -4,6 +4,11 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="ZiQPrO" name="Wilt">
     <GROUP id="{15365F62-7A79-1017-A4AB-C299E8989C82}" name="Source">
+      <GROUP id="{57FC9CC0-5C94-20C6-3D87-EB0868351CA5}" name="GUI">
+        <FILE id="cgh2Vw" name="LookAndFeel.cpp" compile="1" resource="0" file="Source/LookAndFeel.cpp"/>
+        <FILE id="nCYbLq" name="LookAndFeel.h" compile="0" resource="0" file="Source/LookAndFeel.h"/>
+      </GROUP>
+      <FILE id="vMeqoK" name="Outils.hpp" compile="0" resource="0" file="Source/Outils.hpp"/>
       <FILE id="KxBwuz" name="Buffer.h" compile="0" resource="0" file="Source/Buffer.h"/>
       <FILE id="zsA0jM" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
       <FILE id="PabiZv" name="Wilt.cpp" compile="1" resource="0" file="Source/Wilt.cpp"/>

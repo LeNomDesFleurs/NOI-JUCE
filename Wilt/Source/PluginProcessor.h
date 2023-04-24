@@ -9,6 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Wilt.h"
+
 
 //==============================================================================
 /**
@@ -32,7 +34,7 @@ public:
    #endif
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
-
+    void setParam();
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
@@ -56,7 +58,14 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    juce::AudioProcessorValueTreeState parameters;
+
 private:
+    juce::AudioProcessorValueTreeState::ParameterLayout createParams();
+
+
+    Wilt wilt[2];
+    Wilt::Parameters wilt_parameters;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WiltAudioProcessor)
 };

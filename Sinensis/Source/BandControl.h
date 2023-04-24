@@ -16,29 +16,19 @@
 struct BandControl : juce::Component {
 
     BandControl(juce::AudioProcessorValueTreeState& apvts);
-
     void paint(juce::Graphics& g) override;
     void resized() override;
-
     juce::Colour back_ground_color;
 
 private:
-
     OtherLookAndFeel otherLookAndFeel;
-
-    juce::Slider BandSelectorSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>BandSelectorAttachement;
-    juce::Label BandSelectorLabel;
-
-    juce::Slider ratioSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>ratioAttachement;
-    juce::Label ratioLabel;
-
-    juce::TextButton lowHighButton{ "Low | High" };
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>lowHighButtonAttachement;
-    juce::TextButton oddEvenButton{ "Odd | Even" };
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>oddEvenButtonAttachement;
-    juce::TextButton peakButton{ "Peak" };
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>peakButtonAttachement;
-
+    //SLIDER
+    juce::Slider BandSelectorSlider, ratioSlider;
+    juce::Label BandSelectorLabel, ratioLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
+        BandSelectorAttachement, ratioAttachement;
+    //BUTTON
+    juce::TextButton lowHighButton{ "Low | High" }, oddEvenButton{ "Odd | Even" }, peakButton{ "Peak" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>
+        lowHighButtonAttachement, oddEvenButtonAttachement, peakButtonAttachement;
 };

@@ -15,14 +15,13 @@ WiltAudioProcessor::WiltAudioProcessor()
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
+         .withInput("Input", juce::AudioChannelSet::stereo(), true)
 #endif
-{
-}
+         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
+#endif
+     ), parameters(*this, nullptr, "PARAMETERS", createParams())
+#endif
+{}
 
 WiltAudioProcessor::~WiltAudioProcessor()
 {
@@ -143,6 +142,7 @@ void WiltAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::M
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    setParam();
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -152,7 +152,12 @@ void WiltAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::M
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
+        auto* channelSamples = buffer.getWritePointer (channel);
+
+        for (auto n = 0; n < buffer.getNumSamples(); ++n) {
+            const auto input = channelSamples[n];
+            channelSamples[n] = wilt[channel].processSample(input);
+        }
 
         // ..do something to the data...
     }
@@ -166,7 +171,7 @@ bool WiltAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* WiltAudioProcessor::createEditor()
 {
-    return new WiltAudioProcessorEditor (*this);
+    return new WiltAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
@@ -188,4 +193,33 @@ void WiltAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new WiltAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout WiltAudioProcessor::createParams()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+
+   params.push_back(std::make_unique <juce::AudioParameterFloat>("OUTPUTVOLUME", "Ouput Volume", juce::NormalisableRange{ 0.0f, 2.0f, 0.01f }, 0.6f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SPEED", "Speed", juce::NormalisableRange<float> { -2.f, 2.0f, 0.1f }, 1.f));
+    //params.push_back(std::make_unique<juce::AudioParameterFloat>("REDUX", "Redux", juce::NormalisableRange<float> { -2.f, 3.0f, 0.1f }, 0.4f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FEEDBACK", "Feedback", juce::NormalisableRange<float> { 0.1f, 0.99f, 0.01f }, 0.8f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("DRYWET", "DrYWet", juce::NormalisableRange<float> { 0.f, 1.f, 0.01f }, 1.f));
+
+  
+
+    return { params.begin(), params.end() };
+}
+
+
+void WiltAudioProcessor::setParam() {
+ 
+    //PARAM
+    wilt_parameters.speed = *parameters.getRawParameterValue("SPEED");
+    wilt_parameters.feedback = *parameters.getRawParameterValue("FEEDBACK");
+    wilt_parameters.dry_wet = *parameters.getRawParameterValue("DRYWET");
+    //wilt_parameters.output_volume = *parameters.getRawParameterValue("OUTPUTVOLUME");
+    //SET OBJECT
+    wilt[0].setParameters(wilt_parameters);
+    wilt[1].setParameters(wilt_parameters);
 }

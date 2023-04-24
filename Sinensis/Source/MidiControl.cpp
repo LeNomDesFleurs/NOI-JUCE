@@ -12,6 +12,7 @@
 
 MidiControl::MidiControl(juce::AudioProcessorValueTreeState& apvts)
 {
+
     back_ground_color = juce::Colours::darkgrey;
     //SLIDER
     attackAttachement.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(apvts, "ATTACK", attackSlider));
@@ -52,6 +53,10 @@ MidiControl::MidiControl(juce::AudioProcessorValueTreeState& apvts)
     midiMonoButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(apvts, "MIDIMONO", midiMonoButton));
     midiPolyButtonAttachement.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(apvts, "MIDIPOLY", midiPolyButton));
 
+    midiMonoButton.setLookAndFeel(&otherLookAndFeel);
+    midiPolyButton.setLookAndFeel(&otherLookAndFeel);
+    midiOffButton.setLookAndFeel(&otherLookAndFeel);
+
     midiOffButton.setClickingTogglesState(true);
     midiMonoButton.setClickingTogglesState(true);
     midiPolyButton.setClickingTogglesState(true);
@@ -63,11 +68,13 @@ MidiControl::MidiControl(juce::AudioProcessorValueTreeState& apvts)
     midiOffButton.setRadioGroupId(1);
     midiMonoButton.setRadioGroupId(1);
     midiPolyButton.setRadioGroupId(1);
+
+  
 }
 
 void MidiControl::resized() {
 
-    auto bounds = getLocalBounds().reduced(5);
+    auto bounds = getLocalBounds().reduced(10);
     using namespace juce;
 
     auto createBandButtonControlBox = [](std::vector<Component*> comps)
@@ -81,6 +88,7 @@ void MidiControl::resized() {
         for (auto* comp : comps)
         {
             flexBox.items.add(spacer);
+            
             flexBox.items.add(FlexItem(*comp).withFlex(1.f));
         }
         flexBox.items.add(spacer);
@@ -90,23 +98,25 @@ void MidiControl::resized() {
 
     auto midiModeControlBox = createBandButtonControlBox({ &midiOffButton, &midiMonoButton, &midiPolyButton });
 
-
     FlexBox flexBox;
     flexBox.flexDirection = FlexBox::Direction::column;
     flexBox.flexWrap = FlexBox::Wrap::noWrap;
 
     auto spacer = FlexItem().withWidth(4);
     auto endCap = FlexItem().withWidth(6);
-
+    
     flexBox.items.add(endCap);
-
-    flexBox.items.add(FlexItem(midiModeControlBox).withFlex(1.f));
+    auto buttonFlexBox = FlexItem(midiModeControlBox).withFlex(0.5);
+    buttonFlexBox.withMaxWidth(10);
+    flexBox.items.add(buttonFlexBox);
     flexBox.items.add(spacer);
     flexBox.items.add(FlexItem(cutoffFrequencySlider).withFlex(1.f));
     flexBox.items.add(spacer);
     flexBox.items.add(FlexItem(attackSlider).withFlex(1.f));
+    //flexBox.items.add(FlexItem(Envelope).withFlex(1.f));
     flexBox.items.add(spacer);
     flexBox.items.add(FlexItem(decaySlider).withFlex(1.f));
+    flexBox.items.remove(9);
     flexBox.items.add(spacer);
     flexBox.items.add(endCap);
 

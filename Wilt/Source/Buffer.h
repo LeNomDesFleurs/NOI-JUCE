@@ -9,8 +9,8 @@
 */
 
 #pragma once
-#include "outils.hpp"
-#include "filter.hpp"
+#include "Outils.hpp"
+#include "Filter.h"
 #include <math.h>
 
 namespace noi {
@@ -37,11 +37,11 @@ namespace noi {
 			}
 			inline float read() {
 				m_read += m_step;
-				m_read = fmod(m_read, m_buffer_size);
-				float tmp;
+				m_read = fmod(m_read, m_buffer_size-1);
+				double tmp;
 				float fractional;
 
-				fractional = std::modf(m_read, &tmp);
+				fractional = modf(m_read, &tmp);
 				int int_read = static_cast<int> (tmp);
 				float sample1 = m_buffer[int_read];
 				float sample2 = m_buffer[int_read + 1];
@@ -51,7 +51,7 @@ namespace noi {
 			}
 			inline void write(float new_sample) {
 				m_write += 1.f;
-				m_write = fmod(m_write, m_buffer_size);
+				m_write = fmod(m_write, m_buffer_size-1);
 				int int_write = static_cast<int>(m_write);
 				m_buffer[int_write] = new_sample;
 			}
@@ -74,7 +74,8 @@ namespace noi {
 				}
 				m_time = new_time;
 				float size_goal = noi::Outils::convertMsToSample(new_time);
-				size_goal = rack::math::clamp(size_goal, 0.f, (m_buffer_size - 2.f));
+				if (size_goal > m_buffer_size - 2.f) size_goal = m_buffer_size - 2.f;
+				if (size_goal <0) size_goal = 0.f;
 				float actual_size = getSize();
 				m_actual_size = actual_size;
 				//ralenti si le buffer doit être plus petit

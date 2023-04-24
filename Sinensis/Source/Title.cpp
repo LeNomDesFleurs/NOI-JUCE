@@ -37,7 +37,9 @@ void Title::paint(juce::Graphics& g)
     auto bounds = getLocalBounds();
     bounds.reduce(10, 10);
     g.setFont(40.0f);
+    juce::String title{ "Sinensis" };
+    //title.set
 
-    g.drawFittedText("Sinensis", 0, 0, getWidth(), 30, juce::Justification::centred, 1);
+    g.drawFittedText("Sinensis", bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), juce::Justification::centred, 1);
 
 }

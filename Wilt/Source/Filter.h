@@ -20,9 +20,8 @@
 #include <string>
 #include <math.h>
 #include <vector>
-#include "outils.hpp"
-#include <rack.hpp>
-#include "buffer.hpp"
+#include "Outils.hpp"
+#include "Buffer.h"
 
 
 
@@ -214,7 +213,8 @@ namespace noi {
 				if (feedback < -4.5 || feedback > 4.5) {
 					feedback /= 10.f;
 				}
-				feedback = rack::math::clamp(feedback, -5.f, 5.f);
+				if (feedback > 5.f)feedback = 5.f;
+				if (feedback < -5.f)feedback = -5.f;
 				b0 += feedback;
 				//shift new value in
 				m_b[2] = m_b[1];
@@ -254,7 +254,8 @@ namespace noi {
 			}
 			inline float process(float input) {
 				float delay = m_buffer.read();
-				delay = rack::math::clamp(delay, -5.f, 5.f);
+				if (delay > 5.f)delay = 5.f;
+				if (delay < -5.f)delay = -5.f;
 				float y = ((input + delay * m_gain) * (-m_gain)) + delay;
 				m_buffer.write(y);
 				return y;
@@ -286,7 +287,8 @@ namespace noi {
 			}
 			inline float process(float input) {
 				float delay = m_buffer.read();
-				delay = rack::math::clamp(delay, -5.f, 5.f);
+				if (delay > 5.f)delay = 5.f;
+				if (delay < -5.f)delay = -5.f;
 				float y = delay * m_gain + input;
 				m_buffer.write(y);
 				return y;

@@ -13,6 +13,8 @@
 #include "Filter.h"
 #include <math.h>
 
+//test
+
 namespace noi {
 	namespace buffer {
 		class RingBuffer {
@@ -26,34 +28,66 @@ namespace noi {
 			float m_actual_size;
 			std::vector<float> m_buffer;
 		public:
-			inline RingBuffer(float max_time) {
+			RingBuffer(float max_time) {
 				m_buffer_size = noi::Outils::convertMsToSample(max_time);
 				size_t buffer_int = static_cast<size_t> (m_buffer_size);
+				m_buffer_size -= 1;
 				m_buffer.resize(buffer_int);
-				m_read = 0.f;
+				m_read = 1.f;
 				m_write = m_buffer_size / 2.f;
 				m_step = 1.f;
 				std::fill(m_buffer.begin(), m_buffer.end(), 0);
 			}
 			inline float read() {
 				m_read += m_step;
-				m_read = fmod(m_read, m_buffer_size-1);
+
 				double tmp;
 				float fractional;
 
 				fractional = modf(m_read, &tmp);
 				int int_read = static_cast<int> (tmp);
+
+				while ((int_read < 0) || (int_read > (m_buffer_size)))
+				{
+
+					if (int_read > (m_buffer_size))
+					{
+						int_read = int_read - (m_buffer_size);
+					}
+
+					if (int_read < 1.0)
+					{
+						int_read = (m_buffer_size ) - m_read;
+					}
+				}
+
 				float sample1 = m_buffer[int_read];
+				if ((int_read + 1) > m_buffer_size) int_read = 1;
 				float sample2 = m_buffer[int_read + 1];
-				//linear interpolation
 				float output = ((sample2 - sample1) * fractional) + sample1;
 				return output;
 			}
 			inline void write(float new_sample) {
 				m_write += 1.f;
-				m_write = fmod(m_write, m_buffer_size-1);
+
 				int int_write = static_cast<int>(m_write);
+
+
+				while ((int_write < 0) || (int_write > m_buffer_size))
+				{
+
+					if (int_write > m_buffer_size)
+					{
+						int_write -= m_buffer_size;
+					}
+
+					if (int_write < 0)
+					{
+						int_write = m_buffer_size-int_write;
+					}
+				}
 				m_buffer[int_write] = new_sample;
+				//m_buffer[1] = new_sample;
 			}
 			inline float getSize() {
 				float size = m_write - m_read;
